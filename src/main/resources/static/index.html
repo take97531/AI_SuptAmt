@@ -3,8 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<a href="/welcome">Welcome to Spring Boot!</a>
+<script>
+    $(document).ready(function(){
+        $("#fetchAmount").click(function(){
+            $.ajax({
+                url: '/api/v1/public/plcys', // Controller의 경로와 일치해야 합니다. 예시에서는 ID가 1인 금액 정보를 조회합니다.
+                type: 'GET',
+                success: function(data) {
+                    console.log("data : " + data);
+                },
+                error: function(error) {
+                    $("#amountInfo").html("Error fetching amount info.");
+                }
+            });
+        });
+    });
+</script>
+
+<button id="fetchAmount">FetchAmount</button>
 </body>
 </html>
