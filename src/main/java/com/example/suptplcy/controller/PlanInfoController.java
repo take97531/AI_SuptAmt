@@ -13,14 +13,14 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/public")
+@RequestMapping("/api/v1/plcys")
 @Slf4j
 public class PlanInfoController {
     @Autowired
     private final PlanInfoService planInfoService;
 
-    // retrieve
-    @GetMapping("/plcys")
+    // retrieveAll
+    @GetMapping("/retrieveAll")
     public List<PlanInfoDTO> getPlanInfo() {
         return planInfoService.getPlanInfo();
     }
