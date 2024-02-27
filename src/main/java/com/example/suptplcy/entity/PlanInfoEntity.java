@@ -1,4 +1,4 @@
-package supt.amt.entity;
+package com.example.suptplcy.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

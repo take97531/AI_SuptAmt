@@ -1,4 +1,4 @@
-package com.example.SuptPlcy;
+package com.example.suptplcy;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

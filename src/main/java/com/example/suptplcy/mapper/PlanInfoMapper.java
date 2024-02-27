@@ -1,11 +1,12 @@
-package supt.amt.entity;
+package com.example.suptplcy.mapper;
 
+import com.example.suptplcy.dto.PlanInfoDTO;
+import com.example.suptplcy.entity.PlanInfoEntity;
 import org.mapstruct.Mapper;
-import supt.amt.dto.PlanInfoDTO;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PlanInfoMapper {
     List<PlanInfoDTO> toPlanInfoDtoList(List<PlanInfoEntity> planInfoEntitys);
 }

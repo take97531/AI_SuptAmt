@@ -1,4 +1,4 @@
-package supt.amt.dto;
+package com.example.suptplcy.dto;
 
 import lombok.Builder;
 import lombok.Data;
