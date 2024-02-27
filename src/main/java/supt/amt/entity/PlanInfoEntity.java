@@ -4,11 +4,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "PLAN_INFO")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@EqualsAndHashCode(callSuper = false)
 public class PlanInfoEntity {
     @Id
     @Column(name = "PLAN_CODE", nullable = false)

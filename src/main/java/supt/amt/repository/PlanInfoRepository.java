@@ -7,6 +7,6 @@ import supt.amt.entity.PlanInfoEntity;
 import java.util.List;
 
 @Repository
-public interface PlanInfoRepositoryImpl extends JpaRepository<PlanInfoEntity, String> {
+public interface PlanInfoRepository extends JpaRepository<PlanInfoEntity, String> {
     List<PlanInfoEntity> findAll();
 }

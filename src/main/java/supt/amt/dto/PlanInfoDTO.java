@@ -16,4 +16,15 @@ public class PlanInfoDTO {
     private String updatedBy;
     private String updateProgram;
     private LocalDateTime updateDatetime;
+
+    public PlanInfoDTO(String planCode, String planName, String createdBy, String createProgram, LocalDateTime createDatetime, String updatedBy, String updateProgram, LocalDateTime updateDatetime) {
+        this.planCode = planCode;
+        this.planName = planName;
+        this.createdBy = createdBy;
+        this.createProgram = createProgram;
+        this.createDatetime = createDatetime;
+        this.updatedBy = updatedBy;
+        this.updateProgram = updateProgram;
+        this.updateDatetime = updateDatetime;
+    }
 }
