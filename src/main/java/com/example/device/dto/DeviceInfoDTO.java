@@ -1,5 +1,8 @@
 package com.example.device.dto;
 
+import lombok.Builder;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -8,6 +11,8 @@ import java.time.LocalDateTime;
  * @생성자   : 권유리
  * @생성일자  : 2024-02-28
  */
+@Data
+@Builder
 public class DeviceInfoDTO {
     private String deviceCode;
     private String deviceName;
@@ -20,7 +25,9 @@ public class DeviceInfoDTO {
     private LocalDateTime updateDatetime;
 
 
-    public DeviceInfoDTO(String deviceCode, String deviceName, BigDecimal devicePrice, String createdBy, String createProgram, LocalDateTime createDatetime, String updatedBy, String updateProgram, LocalDateTime updateDatetime) {
+    public DeviceInfoDTO(String deviceCode, String deviceName, BigDecimal devicePrice,
+                         String createdBy, String createProgram, LocalDateTime createDatetime,
+                         String updatedBy, String updateProgram, LocalDateTime updateDatetime) {
         this.deviceCode = deviceCode;
         this.deviceName = deviceName;
         this.devicePrice = devicePrice;

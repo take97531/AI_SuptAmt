@@ -1,5 +1,8 @@
 package com.example.device.dto;
 
+import lombok.Builder;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
 /**
@@ -7,6 +10,8 @@ import java.time.LocalDateTime;
  * @생성자   : 권유리
  * @생성일자  : 2024-02-28
  */
+@Data
+@Builder
 public class DeviceInventoryDTO {
 
     private String deviceCode;

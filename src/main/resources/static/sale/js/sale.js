@@ -125,6 +125,7 @@ async function fetchDeviceInfos() {
                     const option = new Option(deviceInfo.deviceName, deviceInfo.deviceCode);
                     deviceModelSelect.add(option);
                 });
+
             },
             error: function(error) {
                 console.error("단말기 정보 조회 실패:", error);
@@ -155,13 +156,14 @@ function fetchDeviceInventory() {
     }
 
     $.ajax({
-        url: '/api/device-inventory',
+        url: '/api/v1/device/deviceinventory/device-inventory',
         type: 'GET',
         data: {
             deviceCode: deviceCode,
             deviceNumber: deviceNumber
         },
         success: function(response) {
+            alert("단말기 선택 완료");
             console.log('단말기 정보 조회 성공:', response);
 
         },

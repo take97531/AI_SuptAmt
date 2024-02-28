@@ -24,14 +24,12 @@
     <section id="checkCustomer">
         <h2>고객 확인</h2>
         <input type="text" id="tbx_custTelNumber" placeholder="고객 전화번호 입력" value="010-">
-        <button class="right-bottom" onclick="checkCustomer()">확인</button>
+        <button class="right-bottom" onclick="validateAndCheckCustomer()">확인</button>
     </section>
     <section id="selectDevice">
         <h2>단말 선택</h2>
         <select id="deviceModel">
-            <option value="">단말기 모델 선택</option>
-            <option value="model1">Model 1</option>
-            <option value="model2">Model 2</option>
+            <option value="">단말기 모델 선택을 선택해 주세요</option>
         </select>
         <input type="text" id="serialNumber" placeholder="단말 번호를 입력하세요">
         <button id="selectDeviceComplete" class="right-bottom" onclick="fetchDeviceInventory()">단말 선택 완료</button>
@@ -48,10 +46,6 @@
         <div style="display: flex; justify-content: space-between;"> <!-- 가로로 배치 -->
             <div id="groupSufu">
                 <label><input type="radio" name="subsidy" value="sufu" checked> 공시지원금</label>
-                <select>
-                    <option value="basic">Basic</option>
-                    <option value="six">Six</option>
-                </select>
             </div>
             <div id="groupNoSufu">
                 <label><input type="radio" name="subsidy" value="noSufu"> 무약정</label>
