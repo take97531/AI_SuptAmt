@@ -24,7 +24,7 @@ public class SubscriptionInfoEntity {
     private String marketCode;
 
     @Column(name = "SUBSCRIPTION_DATETIME")
-    private LocalDateTime subscriptionDateTime;
+    private LocalDateTime subscriptionDatetime;
 
     @Column(name = "SUBSCRIPTION_PHONE", unique = true)
     private String subscriptionPhone;
@@ -36,7 +36,7 @@ public class SubscriptionInfoEntity {
     private String createProgram;
 
     @Column(name = "CREATE_DATETIME")
-    private LocalDateTime createDateTime;
+    private LocalDateTime createDatetime;
 
     @Column(name = "UPDATED_BY")
     private String updatedBy;
@@ -45,7 +45,7 @@ public class SubscriptionInfoEntity {
     private String updateProgram;
 
     @Column(name = "UPDATE_DATETIME")
-    private LocalDateTime updateDateTime;
+    private LocalDateTime updateDatetime;
 
     // Getters and Setters
 }
