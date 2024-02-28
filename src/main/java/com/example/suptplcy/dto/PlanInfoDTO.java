@@ -1,4 +1,4 @@
-package com.example.suptplcy.dto;
+package com.example.SuptPlcy.dto;
 
 import lombok.Builder;
 import lombok.Data;
