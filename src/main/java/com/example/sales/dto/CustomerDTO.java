@@ -17,9 +17,12 @@ public class CustomerDTO {
     private LocalDateTime createDatetime;
     private String updatedBy;
     private String updateProgram;
-    private LocalDateTime updateDateTime;
+    private LocalDateTime updateDatetime;
 
-    public CustomerDTO(String subscriptionId, String marketCode, LocalDateTime subscriptionDatetime, String subscriptionPhone, String createdBy, String createProgram, LocalDateTime createDatetime, String updatedBy, String updateProgram, LocalDateTime updateDateTime) {
+    public CustomerDTO(String subscriptionId, String marketCode, LocalDateTime subscriptionDatetime,
+                       String subscriptionPhone, String createdBy, String createProgram,
+                       LocalDateTime createDatetime, String updatedBy, String updateProgram,
+                       LocalDateTime updateDatetime) {
         this.subscriptionId = subscriptionId;
         this.marketCode = marketCode;
         this.subscriptionDatetime = subscriptionDatetime;
@@ -29,6 +32,6 @@ public class CustomerDTO {
         this.createDatetime = createDatetime;
         this.updatedBy = updatedBy;
         this.updateProgram = updateProgram;
-        this.updateDateTime = updateDateTime;
+        this.updateDatetime = updateDatetime;
     }
 }
