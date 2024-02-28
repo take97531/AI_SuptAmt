@@ -15,7 +15,7 @@ import java.util.List;
  * @생성일자 : 2024-02-28
  */
 @RestController
-@RequestMapping("/api/deviceInfos")
+@RequestMapping("/api/v1/device/deviceinfo")
 public class DeviceInfoController {
     private final DeviceInfoService service;
 
@@ -29,7 +29,7 @@ public class DeviceInfoController {
      * @생성자   : 권유리
      * @생성일자  : 2024-02-28
      */
-    @GetMapping
+    @GetMapping("/alldeviceinfo")
     public List<DeviceInfoDTO> getAllDeviceInfos() {
         return service.findAllDevices();
     }

@@ -2,114 +2,139 @@ document.getElementById('refreshPage').addEventListener('click', function() {
     window.location.reload();
 });
 
-/* ■■■■■>> [eventListener] onLoad */
+/**
+ * @name      : [eventListener] onLoad 함수
+ * @작성자     : 권유리
+ * @수정자     :
+ * @작성일자   : 2024-02-26
+ */
 document.addEventListener('DOMContentLoaded', function() {
+    debugger;
 
-    /* 전화번호 초기화 */
     const phoneNumberInput = document.getElementById('tbx_custTelNumber');
-    phoneNumberInput.value = '010-';
 
-    /* 전화번호 input textBox 포맷팅 */
-    formatPhoneNumberInput();
+    /* 전화번호 tbx 포맷팅 Event */
+    phoneNumberInput.addEventListener('input', autoFormatPhoneNumber);
 
-    /* 단말모델 selectBox 초기화*/
-    initializeModelSelection();
-});
-
-/* ■■■■■>> [function] 전화번호 input textBox 포맷팅 */
-function formatPhoneNumberInput() {
-    const phoneNumberInput = document.getElementById('tbx_custTelNumber');
-    /* 숫자만 입력하고 자동 포맷팅 */
-    phoneNumberInput.addEventListener('input', function(e) {
-        let value = e.target.value.replace(/[^\d]/g, '');
-        if (!value.startsWith('010')) {
-            value = '010' + value;
-        }
-        if (value.length > 3) {
-            value = value.slice(0, 3) + '-' + value.slice(3);
-        }
-        if (value.length > 8) {
-            value = value.slice(0, 8) + '-' + value.slice(8, 12);
-        }
-        e.target.value = value;
-    });
-
-    /* 엔터키 입력 감지 */
+    /* 전화번호 tbx keyPrss Event */
     phoneNumberInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            e.preventDefault();
-            checkCustomer();
+            e.preventDefault();         // 폼 자동 제출 방지
+            validateAndCheckCustomer(); // 유효성 검사 후 고객 확인
         }
     });
-}
 
-/* ■■■■■>> [function] 단말 모델 selectBox 초기화 */
-function initializeModelSelection() {
-    const filterInput = document.getElementById('filterInput');
-    const modelSelect = document.getElementById('sbx_trmMdlCd');
-    const modelGrid = document.getElementById('modelGrid');
-
-    // 예시 데이터
-    const dataCollection = [
-        { trmMdlCd: "model1", trmNum: "001", trmMdlNm: "Model 1", stock: 10 },
-        { trmMdlCd: "model2", trmNum: "002", trmMdlNm: "Model 2", stock: 15 },
-        // 추가 데이터
-    ];
-
-    // 초기 모델 그리드 업데이트
-    updateModelGrid(dataCollection);
-}
-
-/* ■■■■■>> [eventListener] 단말 모델 selectBox keyup */
-filterInput.addEventListener('keyup', function() {
-    const searchValue = filterInput.value.toLowerCase();
-    modelSelect.innerHTML = '';
-
-    const filteredModels = dataCollection.filter(model => model.trmMdlNm.toLowerCase().includes(searchValue));
-    filteredModels.forEach(model => {
-        const option = new Option(model.trmMdlNm, model.trmMdlCd);
-        modelSelect.add(option);
-    });
-
-    updateModelGrid(filteredModels);
 });
 
-function updateModelGrid(models) {
-    const modelGrid = document.getElementById('modelGrid');
-    modelGrid.innerHTML = '';
-    models.forEach(model => {
-        const modelInfo = document.createElement('div');
-        modelInfo.textContent = `모델 코드: ${model.trmMdlCd}, 모델 번호: ${model.trmNum}, 모델명: ${model.trmMdlNm}, 재고: ${model.stock}`;
-        modelGrid.appendChild(modelInfo);
-    });
-}
+/**
+ * @name      : 전화번호 유효성 검사 및 고객 확인
+ * @작성자     : 권유리
+ * @수정자     :
+ * @작성일자   : 2024-02-26
+ */
+async function validateAndCheckCustomer() {
 
-function checkCustomer() {
-    const phoneNumber = document.getElementById('tbx_custTelNumber').value.replace(/-/g, '');
+    let phoneNumber = document.getElementById('tbx_custTelNumber').value.replace(/-/g, '');
     if (phoneNumber.length < 11) {
         alert('전화번호는 총 11자리입니다.');
+        return;
+    }
+
+    /* 고객 정보 조회 */
+    const customerCheckResult = await checkCustomer(phoneNumber);
+    if(customerCheckResult){
+
+        /* 단말기 정보 조회 */
+        await fetchDeviceInfos();
+    }
+
+}
+
+
+/**
+ * @name      : 전화번호 tbx 포맷팅 함수
+ * @작성자     : 권유리
+ * @수정자     :
+ * @작성일자   : 2024-02-28
+ */
+function autoFormatPhoneNumber(event) {
+    let value = event.target.value.replace(/[^0-9]/g, ''); // 숫자만 추출
+    let formattedNumber = '';
+
+    /* 자동 하이픈(-) 추가 */
+    if (value.length > 3 && value.length <= 7) {
+        formattedNumber = `${value.slice(0, 3)}-${value.slice(3)}`;
+    } else if (value.length > 7) {
+        formattedNumber = `${value.slice(0, 3)}-${value.slice(3, 7)}-${value.slice(7, 11)}`;
     } else {
-        $.ajax({
-            url: '/api/v1/sales/checkCustomer', // Controller의 경로와 일치해야 합니다. 예시에서는 ID가 1인 금액 정보를 조회합니다.
-            type: 'get',
-            data: {
-              phone : phoneNumber
-            },
-            success: function(data) {
-                console.log("data : " + data);
-                if(data) {
-                    alert('고객 확인 완료');
-                    // 다음 섹션 보이기
-                    document.getElementById('selectDevice').style.display = 'block';
-                }
-                else
-                    alert('존재하지 않는 고객입니다.');
+        formattedNumber = value;
+    }
+
+    /* 포맷된 번호로 값 업데이트 */
+    event.target.value = formattedNumber;
+}
+
+
+
+/**
+ * @name      : 단말 전체 정보 조회 api
+ * @작성자     : 권유리
+ * @수정자     :
+ * @작성일자   : 2024-02-28
+ */
+async function fetchDeviceInfos() {
+    debugger;
+    try {
+        const deviceInfos = await $.ajax({
+            url: '/api/v1/device/deviceinfo/alldeviceinfo',
+            type: 'GET',
+            success: function(deviceInfos) {
+                debugger;
+                console.log("단말기 정보 조회 성공:", deviceInfos);
+                const deviceModelSelect = document.getElementById('deviceModel');
+                deviceModelSelect.innerHTML = '<option value="">단말기 모델 선택</option>';
+
+                /* 조회된 단말기 정보를 selectBox에 세팅 */
+                deviceInfos.forEach(function(deviceInfo) {
+                    const option = new Option(deviceInfo.deviceName, deviceInfo.deviceCode);
+                    deviceModelSelect.add(option);
+                });
             },
             error: function(error) {
-                console.log("error : " + error);
+                console.error("단말기 정보 조회 실패:", error);
+                alert('단말기 정보를 조회할 수 없습니다.');
             }
         });
+    } catch (error) {
+        console.error("단말기 정보 조회 실패:", error);
+        alert('단말기 정보를 조회할 수 없습니다.');
+    }
+}
 
+
+/**
+ * @name      : 고객정보조회 api
+ * @작성자     : 권유리
+ * @수정자     :
+ * @작성일자   : 2024-02-28
+ */
+async function checkCustomer() {
+    try {
+        let phoneNumber = document.getElementById('tbx_custTelNumber').value.replace(/-/g, '');
+
+        const response = await $.ajax({
+            url: '/api/v1/sales/checkCustomer',
+            type: 'GET',
+            data: { phone: phoneNumber },
+        });
+        console.log("고객 정보 조회 성공:", response);
+        alert('고객 확인 완료');
+        return true;
+    }
+    catch (error){
+        console.error("고객 정보 조회 실패:", error);
+        alert('존재하지 않는 고객입니다.');
+        return false;
     }
 }
 
