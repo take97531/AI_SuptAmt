@@ -75,6 +75,32 @@ function autoFormatPhoneNumber(event) {
 }
 
 
+/**
+ * @name      : 고객정보조회 api
+ * @작성자     : 권유리
+ * @수정자     :
+ * @작성일자   : 2024-02-28
+ */
+async function checkCustomer() {
+    try {
+        let phoneNumber = document.getElementById('tbx_custTelNumber').value.replace(/-/g, '');
+
+        const response = await $.ajax({
+            url: '/api/v1/sales/checkCustomer',
+            type: 'GET',
+            data: { phone: phoneNumber },
+        });
+        console.log("고객 정보 조회 성공:", response);
+        alert('고객 확인 완료');
+        return true;
+    }
+    catch (error){
+        console.error("고객 정보 조회 실패:", error);
+        alert('존재하지 않는 고객입니다.');
+        return false;
+    }
+}
+
 
 /**
  * @name      : 단말 전체 정보 조회 api
@@ -111,39 +137,41 @@ async function fetchDeviceInfos() {
     }
 }
 
-
 /**
- * @name      : 고객정보조회 api
+ * @name      : 단말기 정보 조회 api
  * @작성자     : 권유리
  * @수정자     :
- * @작성일자   : 2024-02-28
+ * @작성일자   : 2024-02-26
  */
-async function checkCustomer() {
-    try {
-        let phoneNumber = document.getElementById('tbx_custTelNumber').value.replace(/-/g, '');
+function fetchDeviceInventory() {
 
-        const response = await $.ajax({
-            url: '/api/v1/sales/checkCustomer',
-            type: 'GET',
-            data: { phone: phoneNumber },
-        });
-        console.log("고객 정보 조회 성공:", response);
-        alert('고객 확인 완료');
-        return true;
+    const deviceCode = document.getElementById('deviceModel').value;
+    const deviceNumber = document.getElementById('serialNumber').value;
+
+    /* 단말기 유효성 체크 */
+    if (!deviceCode || !deviceNumber) {
+        alert('단말기 모델과 일련번호를 모두 입력해주세요.');
+        return;
     }
-    catch (error){
-        console.error("고객 정보 조회 실패:", error);
-        alert('존재하지 않는 고객입니다.');
-        return false;
-    }
+
+    $.ajax({
+        url: '/api/device-inventory',
+        type: 'GET',
+        data: {
+            deviceCode: deviceCode,
+            deviceNumber: deviceNumber
+        },
+        success: function(response) {
+            console.log('단말기 정보 조회 성공:', response);
+
+        },
+        error: function(xhr, status, error) {
+            console.error('단말기 정보 조회 실패:', error);
+            alert('단말기 정보 조회에 실패했습니다.');
+        }
+    });
 }
 
-function selectDevice() {
-    // 단말 선택 로직
-    alert('단말 선택 완료');
-    // 다음 섹션 보이기
-    document.getElementById('selectPlan').style.display = 'block';
-}
 
 function selectPlan() {
     // 요금제 선택 로직

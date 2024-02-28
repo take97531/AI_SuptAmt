@@ -2,6 +2,8 @@ package com.example.device.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -11,12 +13,13 @@ import java.time.LocalDateTime;
  * @생성일자  : 2024-02-28
  */
 @Entity
+@Setter
+@Getter
 @Table(name = "device_inventory")
 public class DeviceInventoryEntity {
 
     @Id
     private String deviceCode;
-
     private String deviceNumber;
     private String deviceUsage;
     private String createdBy;
@@ -26,5 +29,4 @@ public class DeviceInventoryEntity {
     private String updateProgram;
     private LocalDateTime updateDatetime;
 
-    // Getters and Setters
 }
