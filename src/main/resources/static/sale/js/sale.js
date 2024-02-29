@@ -33,6 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    /* 단말 모델 전체 조회 */
+    fetchDeviceInfos();
+
 });
 
 /**
@@ -50,12 +53,8 @@ async function validateAndCheckCustomer() {
     }
 
     /* 고객 정보 조회 */
-    const customerCheckResult = await checkCustomer(phoneNumber);
-    if(customerCheckResult){
+    await checkCustomer(phoneNumber);
 
-        /* 단말기 정보 조회 */
-        await fetchDeviceInfos();
-    }
 
 }
 
@@ -155,8 +154,9 @@ async function fetchDeviceInfos() {
  */
 function fetchDeviceInventory() {
 
-    const deviceCode = document.getElementById('deviceModel').value;
-    const deviceNumber = document.getElementById('serialNumber').value;
+    let deviceCode = document.getElementById('deviceModel').value;
+    let deviceNumber = document.getElementById('serialNumber').value;
+    deviceNumber = deviceNumber.padStart(20, '0');
 
     /* 단말기 유효성 체크 */
     if (!deviceCode || !deviceNumber) {
