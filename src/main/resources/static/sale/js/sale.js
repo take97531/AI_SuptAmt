@@ -19,10 +19,22 @@ document.addEventListener('DOMContentLoaded', function() {
     /* 전화번호 tbx keyPrss Event */
     phoneNumberInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            e.preventDefault();         // 폼 자동 제출 방지
-            validateAndCheckCustomer(); // 유효성 검사 후 고객 확인
+            e.preventDefault();
+            validateAndCheckCustomer();
         }
     });
+
+    /* 단말 번호 입력 입력 박스 keyPrss Event */
+    const serialNumberInput = document.getElementById('serialNumber');
+    serialNumberInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            fetchDeviceInventory();
+        }
+    });
+
+    /* 단말 모델 전체 조회 */
+    fetchDeviceInfos();
 
 });
 
@@ -41,12 +53,8 @@ async function validateAndCheckCustomer() {
     }
 
     /* 고객 정보 조회 */
-    const customerCheckResult = await checkCustomer(phoneNumber);
-    if(customerCheckResult){
+    await checkCustomer(phoneNumber);
 
-        /* 단말기 정보 조회 */
-        await fetchDeviceInfos();
-    }
 
 }
 
@@ -157,8 +165,9 @@ async function fetchDeviceInfos() {
  */
 function fetchDeviceInventory() {
 
-    const deviceCode = document.getElementById('deviceModel').value;
-    const deviceNumber = document.getElementById('serialNumber').value;
+    let deviceCode = document.getElementById('deviceModel').value;
+    let deviceNumber = document.getElementById('serialNumber').value;
+    deviceNumber = deviceNumber.padStart(20, '0');
 
     /* 단말기 유효성 체크 */
     if (!deviceCode || !deviceNumber) {
