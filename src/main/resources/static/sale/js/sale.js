@@ -19,8 +19,17 @@ document.addEventListener('DOMContentLoaded', function() {
     /* 전화번호 tbx keyPrss Event */
     phoneNumberInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            e.preventDefault();         // 폼 자동 제출 방지
-            validateAndCheckCustomer(); // 유효성 검사 후 고객 확인
+            e.preventDefault();
+            validateAndCheckCustomer();
+        }
+    });
+
+    /* 단말 번호 입력 입력 박스 keyPrss Event */
+    const serialNumberInput = document.getElementById('serialNumber');
+    serialNumberInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            fetchDeviceInventory();
         }
     });
 
