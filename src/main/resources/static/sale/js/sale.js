@@ -24,7 +24,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // 요금제 정보 조회 함수 호출
+    fetchAndPopulatePlans();
 });
+
+// 요금제 선택 셀렉트 박스 변경 이벤트에 함수 연결
+document.getElementById('selectedPlanDisplaySection').addEventListener('change', function () {
+    // 선택된 요금제 값을 저장
+    document.getElementById('selectedPlanDisplaySection').value;
+
+});
+
 
 /**
  * @name      : 전화번호 유효성 검사 및 고객 확인
@@ -138,6 +148,33 @@ async function checkCustomer() {
     }
 }
 
+/**
+ * @name      : 요금제정보전체조회 api
+ * @작성자     : 이누리
+ * @수정자     :
+ * @작성일자   : 2024-02-28
+ */
+async function fetchAndPopulatePlans() {
+    try {
+        const plans = await $.ajax({
+            url: '/api/v1/plcys/retrieveAll', // 컨트롤러 매핑에 기반한 올바른 URL을 사용하세요.
+            type: 'GET',
+        });
+
+        const planSelect = document.getElementById('selectedPlanDisplaySection');
+        planSelect.innerHTML = '<option value="">요금제 선택</option>';
+
+        // 검색한 요금제로 드롭다운 채우기
+        plans.forEach(function (plan) {
+            const option = new Option(plan.planName, plan.planId);
+            planSelect.add(option);
+        });
+    } catch (error) {
+        console.error("요금제 정보 조회 실패:", error);
+        alert('요금제 정보를 조회할 수 없습니다.');
+    }
+}
+
 function selectDevice() {
     // 단말 선택 로직
     alert('단말 선택 완료');
@@ -147,9 +184,13 @@ function selectDevice() {
 
 function selectPlan() {
     // 요금제 선택 로직
-    alert('요금제 선택 완료');
-    // 다음 섹션 보이기
-    document.getElementById('selectPayment').style.display = 'block';
+    if (selectedPlan !== "") {
+        alert('선택된 요금제: ' + selectedPlan);
+        // 다음 섹션 보이기
+        document.getElementById('selectSubsidy').style.display = 'block';
+    } else {
+        alert('요금제를 선택하세요.');
+    }
 }
 
 function selectSubsidy() {

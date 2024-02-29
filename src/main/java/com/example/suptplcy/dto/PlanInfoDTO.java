@@ -6,7 +6,6 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
 public class PlanInfoDTO {
     private String planCode;
     private String planName;
@@ -17,6 +16,7 @@ public class PlanInfoDTO {
     private String updateProgram;
     private LocalDateTime updateDatetime;
 
+    @Builder
     public PlanInfoDTO(String planCode, String planName, String createdBy, String createProgram, LocalDateTime createDatetime, String updatedBy, String updateProgram, LocalDateTime updateDatetime) {
         this.planCode = planCode;
         this.planName = planName;

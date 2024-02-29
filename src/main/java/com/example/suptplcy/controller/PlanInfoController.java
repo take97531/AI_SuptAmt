@@ -22,6 +22,7 @@ public class PlanInfoController {
     // retrieveAll
     @GetMapping("/retrieveAll")
     public List<PlanInfoDTO> getPlanInfo() {
+
         return planInfoService.getPlanInfo();
     }
 }

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface PlanInfoRepository extends JpaRepository<PlanInfoEntity, String> {
     List<PlanInfoEntity> findAll();
+
 }

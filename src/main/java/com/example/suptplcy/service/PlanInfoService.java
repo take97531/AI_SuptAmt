@@ -22,6 +22,7 @@ public class PlanInfoService {
 
     @Transactional
     public List<PlanInfoDTO> getPlanInfo() {
+
         return planInfoMapper.toPlanInfoDtoList(planInfoRepository.findAll());
     }
 }
