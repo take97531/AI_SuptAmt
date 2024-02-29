@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SalePrssService {
@@ -28,6 +29,8 @@ public class SalePrssService {
     }
 
     public void salePrss(SalePrssDTO salePrssDTO){
+
+        LocalDateTime now = LocalDateTime.now();
         // 단말재고정보 테이블 상태 update
         Optional<DeviceInventoryEntity> optionalDeviceInventory = deviceInventoryRepository.findByDeviceCodeAndDeviceNumber(salePrssDTO.getDeviceCode(), salePrssDTO.getDeviceNumber());
         if (optionalDeviceInventory.isPresent()) {
@@ -43,22 +46,25 @@ public class SalePrssService {
             subscriptionInfo.setDeviceCode(salePrssDTO.getDeviceCode());
             subscriptionInfo.setDeviceNumber(salePrssDTO.getDeviceNumber());
             subscriptionInfo.setPlanCode(salePrssDTO.getPlanCode());
-            subscriptionInfo.setContractDatetime(LocalDateTime.now());
+            subscriptionInfo.setContractDatetime(now);
             contractInfoRepository.save(subscriptionInfo);
         }
 
         // 판매정보 update
         SaleInfoEntity saleInfo = new SaleInfoEntity();
-        saleInfo.setSaleId("123456789");
+        saleInfo.setSaleId(UUID.randomUUID().toString());
         saleInfo.setSubscriptionId(salePrssDTO.getSubscriptionId());
-        saleInfo.setSaleDatetime(LocalDateTime.now());
+        saleInfo.setSaleDatetime(now);
         saleInfo.setDeviceCode(salePrssDTO.getDeviceCode());
         saleInfo.setDeviceNumber(salePrssDTO.getDeviceNumber());
         saleInfo.setDevicePrice(salePrssDTO.getDevicePrice());
         saleInfo.setSupportAmount(salePrssDTO.getSupportAmount());
         saleInfo.setSaleAmount(salePrssDTO.getSaleAmount());
-        saleInfo.setContractStartDatetime(LocalDateTime.now());
-        saleInfo.setContractEndDatetime(LocalDateTime.now().plusMonths(24));
+        saleInfo.setContractStartDatetime(now);
+        saleInfo.setContractEndDatetime(now.plusMonths(24));
+        saleInfo.setCreatedBy("정하성");
+        saleInfo.setCreateProgram("salePrss");
+        saleInfo.setCreateDatetime(now);
 
         saleInfoRepository.save(saleInfo);
     }
