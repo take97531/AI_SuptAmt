@@ -11,21 +11,23 @@ document.getElementById('refreshPage').addEventListener('click', function() {
 document.addEventListener('DOMContentLoaded', function() {
     debugger;
 
-    const phoneNumberInput = document.getElementById('tbx_custTelNumber');
+    /** ■■■■■>>  고객 정보 전화번호 textBox */
+    const phoneNumberTbx = document.getElementById('tbx_custTelNumber');
 
-    /* 전화번호 tbx 포맷팅 Event */
-    phoneNumberInput.addEventListener('input', autoFormatPhoneNumber);
+    /* 고객 정보 전화번호 tbx 포맷팅 Event */
+    phoneNumberTbx.addEventListener('input', autoFormatPhoneNumber);
 
-    /* 전화번호 tbx keyPrss Event */
-    phoneNumberInput.addEventListener('keypress', function(e) {
+    /* 고객 정보 전화번호 tbx keyPrss Event */
+    phoneNumberTbx.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
             validateAndCheckCustomer();
         }
     });
 
-    /* 단말 번호 입력 입력 박스 keyPrss Event */
+    /** ■■■■■>>  단말 번호 입력 박스 */
     const serialNumberInput = document.getElementById('serialNumber');
+    /* 단말 번호 입력 입력 박스 keyPrss Event */
     serialNumberInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -57,7 +59,6 @@ async function validateAndCheckCustomer() {
 
     /* 고객 정보 조회 */
     await checkCustomer(phoneNumber);
-
 
 }
 
@@ -105,6 +106,9 @@ async function checkCustomer() {
         console.log("고객정보 : ", response);
 
         if(response) {
+            document.getElementById('customerIDInput').value = response.subscriptionId;
+            document.getElementById('marketCodeInput').value = response.marketCode;
+            document.getElementById('phoneNumberInput').value = response.subscriptionPhone;
             alert('고객 확인 완료');
             return true;
         } else {
@@ -116,7 +120,6 @@ async function checkCustomer() {
         return false;
     }
 }
-
 
 /**
  * @name      : 단말 전체 정보 조회 api
