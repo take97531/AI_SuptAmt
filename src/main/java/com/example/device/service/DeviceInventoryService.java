@@ -46,6 +46,12 @@ public class DeviceInventoryService {
                 .map(this::convertToDTO);
     }
 
+    
+    /**
+     * @name    : entity → dto 변환 함수
+     * @생성자   : 권유리
+     * @생성일자  : 2024-02-28
+     * */
     private DeviceInventoryDTO convertToDTO(DeviceInventoryEntity deviceInventory) {
 
         return new DeviceInventoryDTO(
@@ -59,7 +65,6 @@ public class DeviceInventoryService {
                 deviceInventory.getUpdateProgram(),
                 deviceInventory.getUpdateDatetime()
         );
-        // 엔티티를 DTO로 변환하는 로직
     }
 
 
