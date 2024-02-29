@@ -1,5 +1,6 @@
 package com.example.sales.service;
 
+import com.example.sales.dto.CustomerDTO;
 import com.example.sales.entity.SubscriptionInfoEntity;
 import com.example.sales.mapper.CustomerMapper;
 import com.example.sales.repository.SubscriptionInfoRepository;
@@ -15,19 +16,20 @@ public class CustomerService {
         this.customerMapper = customerMapper;
     }
 
-    public boolean checkCustomerByPhone(String phone) {
-        System.out.println("phone : " + phone);
+    /**
+     * @name        : 전화번호로 고객정보 조회 api
+     * @작성자       : 이정호
+     * @수정자       : 권유리
+     * @최초작성일자  : 2024-02-07
+     * @수정일자     : 2024-02-29
+     * @return
+     */
+    public CustomerDTO checkCustomerByPhone(String phone) {
         SubscriptionInfoEntity subscriptionInfo = subscriptionInfoRepository.findBySubscriptionPhone(phone);
-        System.out.println("subscriptionInfo : " + subscriptionInfo);
-
-      //  CustomerDTO customerDto = customerMapper.toPlanInfoDto(subscriptionInfo);
-
-
-      //  System.out.println("customerDto : " + customerDto);
-
-        if(subscriptionInfo != null)
-            return true;
-        else
-            return false;
+        if(subscriptionInfo != null) {
+            return customerMapper.toPlanInfoDto(subscriptionInfo);
+        } else {
+            return null;
+        }
     }
 }

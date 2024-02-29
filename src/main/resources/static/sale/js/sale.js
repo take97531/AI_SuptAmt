@@ -96,29 +96,23 @@ async function checkCustomer() {
     try {
         let phoneNumber = document.getElementById('tbx_custTelNumber').value.replace(/-/g, '');
         var res = false;
-
         const response = await $.ajax({
             url: '/api/v1/sales/checkCustomer',
             type: 'GET',
             data: { phone: phoneNumber },
-            success: function(data) {
-                console.log("data : " + data);
-                if(data) {
-                    res = true;
-                    alert('고객 확인 완료');
-                }
-                else {
-                    res = false;
-                    alert('존재하지 않는 고객입니다.');
-                }
-            },
-            error: function(error) {
-                console.log("error : " + error);
-            }
         });
-        return res;
-    }
-    catch (error){
+
+        console.log("고객정보 : ", response);
+
+        if(response) {
+            alert('고객 확인 완료');
+            return true;
+        } else {
+            alert('존재하지 않는 고객입니다.');
+            return false;
+        }
+    } catch (error) {
+        console.error("에러 발생:", error);
         return false;
     }
 }
@@ -138,7 +132,7 @@ async function fetchDeviceInfos() {
             type: 'GET',
             success: function(deviceInfos) {
                 debugger;
-                console.log("단말기 정보 조회 성공:", deviceInfos);
+                console.log("단말기 전체 정보 :", deviceInfos);
                 const deviceModelSelect = document.getElementById('deviceModel');
                 deviceModelSelect.innerHTML = '<option value="">단말기 모델 선택</option>';
 
@@ -187,7 +181,7 @@ function fetchDeviceInventory() {
         },
         success: function(response) {
             alert("단말기 선택 완료");
-            console.log('단말기 정보 조회 성공:', response);
+            console.log('선택 단말 정보 :', response);
 
         },
         error: function(xhr, status, error) {

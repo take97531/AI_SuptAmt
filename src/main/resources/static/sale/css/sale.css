@@ -100,3 +100,38 @@ label {
 #checkCustomer, #selectDevice, #selectPlan, #selectSubsidy, #selectPayment {
     position: relative; /* 버튼의 절대 위치 기준점 설정 */
 }
+.customer-sections {
+    display: flex;
+    justify-content: space-between; /* 내부 아이템을 양 끝으로 정렬 */
+    align-items: stretch; /* 섹션들의 높이를 컨테이너에 맞춰 늘림 */
+    gap: 20px; /* 섹션 사이의 간격 */
+}
+
+#checkCustomer, #customerInfo {
+    flex-basis: 48%; /* 두 섹션 모두 화면의 약 절반 크기를 차지하도록 설정 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 기존 CSS 스타일에 영향을 미치지 않도록 추가된 스타일 */
+#customerInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.customer-info-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.customer-info-row label {
+    width: 20%; /* 레이블의 너비를 고정합니다. */
+    min-width: 100px; /* 최소 너비를 설정하여 레이블이 너무 작아지지 않도록 합니다. */
+    margin-right: 10px; /* 레이블과 입력 필드 사이의 간격을 설정합니다. */
+}
+
+.customer-info-row input {
+    width: 80%; /* 입력 필드가 나머지 공간을 차지하도록 설정합니다. */
+    flex-grow: 1; /* 필요한 경우 입력 필드가 확장되도록 합니다. */
+}

@@ -21,11 +21,28 @@
     </div>
 </nav>
 <main class="container">
-    <section id="checkCustomer">
-        <h2>고객 확인</h2>
-        <input type="text" id="tbx_custTelNumber" placeholder="고객 전화번호 입력" value="010-">
-        <button class="right-bottom" onclick="validateAndCheckCustomer()">확인</button>
-    </section>
+    <div class="customer-sections">
+        <section id="checkCustomer">
+            <h2>고객 확인</h2>
+            <input type="text" id="tbx_custTelNumber" placeholder="고객 전화번호 입력" value="010-">
+            <button class="right-bottom" onclick="validateAndCheckCustomer()">확인</button>
+        </section>
+        <section id="customerInfo">
+            <h2>고객 정보</h2>
+            <div class="customer-info-row">
+                <label for="customerIDInput">고객 ID</label>
+                <input type="text" id="customerIDInput" readonly>
+            </div>
+            <div class="customer-info-row">
+                <label for="marketCodeInput">마켓 코드</label>
+                <input type="text" id="marketCodeInput" readonly>
+            </div>
+            <div class="customer-info-row">
+                <label for="phoneNumberInput">전화번호</label>
+                <input type="text" id="phoneNumberInput" readonly>
+            </div>
+        </section>
+    </div>
     <section id="selectDevice">
         <h2>단말 선택</h2>
         <select id="deviceModel">
