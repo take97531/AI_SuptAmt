@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공시지원금 조회</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>공시지원금 조회</h1>
+    <form id="plcyForm">
+        <div class="form-group">
+            <label for="model">단말기:</label>
+            <input type="text" class="form-control" id="model" name="model">
+        </div>
+        <div class="form-group">
+            <label for="plan">요금제:</label>
+            <input type="text" class="form-control" id="plan" name="plan">
+        </div>
+        <button type="submit" class="btn btn-primary">조회</button>
+    </form>
+    <div class="mt-3">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>마켓코드</th>
+                <th>단말기</th>
+                <th>요금제</th>
+                <th>할인유형</th>
+                <th>출고가</th>
+                <th>공시지원금</th>
+                <th>총판매가</th>
+                <th>시작일시</th>
+                <th>종료일시</th>
+            </tr>
+            </thead>
+            <tbody id="plcyTableBody">
+            <!-- 조회 결과가 여기에 추가될 것입니다. -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $('#plcyForm').submit(function(e){
+            e.preventDefault();
+            var model = $('#model').val();
+            var plan = $('#plan').val();
+            $.ajax({
+                type: 'GET',
+                url: '/api/v1/public/subsidy/' + encodeURIComponent(model) + '/' + encodeURIComponent(plan),
+                success: function(data){
+                    $('#plcyTableBody').empty();
+                    for(var i=0; i<data.length; i++) {
+                        var row = '<tr>';
+                        row += '<td>' + data[i].marketCode + '</td>';
+                        row += '<td>' + data[i].deviceCode + '</td>';
+                        row += '<td>' + data[i].planCode + '</td>';
+                        row += '<td>' + (data[i].discountType === 'S' ? '식스플랜' : '베이직플랜')  + '</td>';
+                        row += '<td>' + data[i].deviceAmount + '</td>';
+                        row += '<td>' + data[i].supportAmount + '</td>';
+                        row += '<td>' + (data[i].deviceAmount - data[i].supportAmount) + '</td>';
+                        row += '<td>' + formatDate(data[i].startDatetime) + '</td>';
+                        row += '<td>' + formatDate(data[i].endDatetime) + '</td>';
+                        row += '</tr>';
+                        $('#plcyTableBody').append(row);
+                    }
+                },
+                error: function(){
+                    alert('조회 실패');
+                }
+            });
+        });
+    });
+
+    function formatDate(dateString) {
+        var date = new Date(dateString);
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var day = date.getDate();
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var seconds = date.getSeconds();
+
+        // Leading zero padding for single digit values
+        month = month < 10 ? '0' + month : month;
+        day = day < 10 ? '0' + day : day;
+        hours = hours < 10 ? '0' + hours : hours;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+    }
+</script>
+</body>
+</html>
