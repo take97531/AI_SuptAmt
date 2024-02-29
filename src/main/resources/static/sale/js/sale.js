@@ -92,19 +92,30 @@ function autoFormatPhoneNumber(event) {
 async function checkCustomer() {
     try {
         let phoneNumber = document.getElementById('tbx_custTelNumber').value.replace(/-/g, '');
+        var res = false;
 
         const response = await $.ajax({
             url: '/api/v1/sales/checkCustomer',
             type: 'GET',
             data: { phone: phoneNumber },
+            success: function(data) {
+                console.log("data : " + data);
+                if(data) {
+                    res = true;
+                    alert('고객 확인 완료');
+                }
+                else {
+                    res = false;
+                    alert('존재하지 않는 고객입니다.');
+                }
+            },
+            error: function(error) {
+                console.log("error : " + error);
+            }
         });
-        console.log("고객 정보 조회 성공:", response);
-        alert('고객 확인 완료');
-        return true;
+        return res;
     }
     catch (error){
-        console.error("고객 정보 조회 실패:", error);
-        alert('존재하지 않는 고객입니다.');
         return false;
     }
 }
