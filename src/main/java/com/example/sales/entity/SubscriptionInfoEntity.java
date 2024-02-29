@@ -1,16 +1,13 @@
 package com.example.sales.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "SUBSCRIPTION_INFO")
-@Getter
+@Data
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @EqualsAndHashCode(callSuper = false)
 public class SubscriptionInfoEntity {
@@ -48,4 +45,21 @@ public class SubscriptionInfoEntity {
     private LocalDateTime updateDatetime;
 
     // Getters and Setters
+
+    @Builder
+    public SubscriptionInfoEntity(String subscriptionId, String marketCode, LocalDateTime subscriptionDatetime,
+                                  String subscriptionPhone,
+                                  String createdBy, String createProgram, LocalDateTime createDatetime,
+                              String updatedBy, String updateProgram, LocalDateTime updateDatetime) {
+        this.subscriptionId = subscriptionId;
+        this.marketCode = marketCode;
+        this.subscriptionDatetime = subscriptionDatetime;
+        this.subscriptionPhone = subscriptionPhone;
+        this.createdBy = createdBy;
+        this.createProgram = createProgram;
+        this.createDatetime = createDatetime;
+        this.updatedBy = updatedBy;
+        this.updateProgram = updateProgram;
+        this.updateDatetime = updateDatetime;
+    }
 }
