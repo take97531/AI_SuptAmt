@@ -8,72 +8,108 @@
 
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>단말 판매 시스템</h1>
+<header>
+    <div class="container">
+        <h1>단말 판매 시스템</h1>
+    </div>
+</header>
+<nav>
+    <div class="container">
+        <ul>
+            <li><a href="javascript:void(0);" id="refreshPage">단말 판매</a></li>
+        </ul>
+    </div>
+</nav>
+<main class="container">
+    <section id="checkCustomer">
+        <h2>고객 확인</h2>
+        <input type="text" id="tbx_custTelNumber" placeholder="고객 전화번호 입력" value="010-">
+        <button class="right-bottom" onclick="validateAndCheckCustomer()">확인</button>
+    </section>
+    <section id="selectDevice">
+        <h2>단말 선택</h2>
+        <select id="deviceModel">
+            <option value="">단말기 모델 선택</option>
+        </select>
+        <input type="text" id="serialNumber" placeholder="단말 번호를 입력하세요">
+        <button id="selectDeviceComplete" class="right-bottom" onclick="fetchDeviceInventory()">단말 선택 완료</button>
+    </section>
+    <section id="selectPlan">
+        <h2>요금제 선택</h2>
+        <select id="plan">
+            <option value="">요금제 선택</option>
+        </select>
+        <button class="right-bottom" onclick="selectPlan()">요금제 선택 완료</button>
+    </section>
+    <section id="selectSubsidy">
+        <h2>지원금 선택</h2>
+        <div style="display: flex; justify-content: space-between;"> <!-- 가로로 배치 -->
+            <div id="groupSufu">
+                <label><input type="radio" name="subsidy" value="sufu" checked> 공시지원금</label>
+            </div>
+            <div id="groupNoSufu">
+                <label><input type="radio" name="subsidy" value="noSufu"> 무약정</label>
+            </div>
         </div>
-    </header>
-    <nav>
-        <div class="container">
-            <ul>
-                <li><a href="http://localhost:63342/aiUcube/templates/retreive.html?_ijt=prablmcgv5lvf2hgmvtvd3k955&_ij_reload=RELOAD_ON_SAVE">공시지원금 조회</a></li>
-                <li><a href="javascript:void(0);" id="refreshPage">단말 판매</a></li>
-            </ul>
-        </div>
-    </nav>
-    <main class="container">
-        <section id="checkCustomer">
-            <h2>고객 확인</h2>
-            <input type="text" id="tbx_custTelNumber" placeholder="고객 전화번호 입력" value="010-">
-            <button class="right-bottom" onclick="checkCustomer()">확인</button>
-        </section>
-        <section id="selectDevice">
-            <h2>단말 선택</h2>
-            <select id="deviceModel">
-                <option value="">단말기 모델 선택</option>
-                <option value="model1">Model 1</option>
-                <option value="model2">Model 2</option>
-            </select>
-            <input type="text" id="serialNumber" placeholder="단말기 일련번호 입력">
-            <button class="right-bottom" onclick="selectDevice()">단말 선택 완료</button>
-        </section>
-        <section id="selectPlan">
-            <h2>요금제 선택</h2>
-            <select id="plan">
-                <option value="">요금제 선택</option>
-            </select>
-            <button class="right-bottom" onclick="selectPlan()">요금제 선택 완료</button>
-        </section>
-        <section id="selectSubsidy">
-            <h2>지원금 선택</h2>
-            <div style="display: flex; justify-content: space-between;"> <!-- 가로로 배치 -->
-                <div id="groupSufu">
-                    <label><input type="radio" name="subsidy" value="sufu" checked> 공시지원금</label>
-                    <select>
-                        <option value="basic">Basic</option>
-                        <option value="six">Six</option>
-                    </select>
+        <button class="right-bottom" onclick="selectSubsidy()">지원금 선택 완료</button>
+    </section>
+    <section id="selectPayment">
+        <h2>결제 방식 선택</h2>
+
+        <!-- 그룹 전체를 가로로 정렬 -->
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+
+            <!-- 현금결제 라디오 박스 그룹 -->
+            <div style="width: 48%;">
+                <label><input type="radio" name="payment" value="cash" checked> 현금결제</label>
+                <!-- 다른 결제 방식이 필요하면 추가하세요 -->
+            </div>
+
+            <!-- 금액 필드 그룹 -->
+            <div style="width: 48%; display: flex; flex-direction: column;">
+
+                <!-- 출고금액, 지원금액, 판매금액 -->
+                <div style="margin-bottom: 10px;">
+                    <label for="salesAmount">출고금액:</label>
+                    <input type="text" id="salesAmount" placeholder="출고금액 입력" readonly>
                 </div>
-                <div id="groupNoSufu">
-                    <label><input type="radio" name="subsidy" value="noSufu"> 무약정</label>
+
+                <div style="margin-bottom: 10px;">
+                    <label for="subsidyAmount">지원금액:</label>
+                    <input type="text" id="subsidyAmount" placeholder="지원금액 입력" readonly>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <label for="totalAmount">판매금액:</label>
+                    <input type="text" id="totalAmount" placeholder="판매금액 입력" readonly>
+                </div>
+
+                <!-- 납입금액, 차액, 결제금액 -->
+                <div style="margin-bottom: 10px;">
+                    <label for="receivedAmount">납입금액:</label>
+                    <input type="text" id="receivedAmount" placeholder="납입금액 입력" readonly>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <label for="differenceAmount">차액:</label>
+                    <input type="text" id="differenceAmount" placeholder="차액 입력" readonly>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <label for="paymentAmount">결제금액:</label>
+                    <input type="text" id="paymentAmount" placeholder="결제금액 입력">
                 </div>
             </div>
-            <button class="right-bottom" onclick="selectSubsidy()">지원금 선택 완료</button>
-        </section>
-        <section id="selectPayment">
-            <h2>결제 방식 선택</h2>
-            <label><input type="radio" name="payment" value="cash" checked> 현금결제</label>
-        </section>
-        <section id="completeSale">
-            <button class="right-bottom" onclick="completeSale()">판매 완료</button>
-        </section>
-    </main>
-    <footer>
-        <div class="container">
-            <p>© 단말 판매 시스템 </p>
         </div>
-    </footer>
-    <script src="../../sale/js/sale.js"></script> <!-- JavaScript 파일 링크 -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <button class="right-bottom" onclick="completeSale()">판매 완료</button>
+    </section>
+</main>
+<footer>
+    <div class="container">
+        <p>© 단말 판매 시스템 </p>
+    </div>
+</footer>
+<script src="../../sale/js/sale.js"></script> <!-- JavaScript 파일 링크 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html>
