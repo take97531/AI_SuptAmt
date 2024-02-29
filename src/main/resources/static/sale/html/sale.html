@@ -61,9 +61,52 @@
     </section>
     <section id="selectPayment">
         <h2>결제 방식 선택</h2>
-        <label><input type="radio" name="payment" value="cash" checked> 현금결제</label>
-    </section>
-    <section id="completeSale">
+
+        <!-- 그룹 전체를 가로로 정렬 -->
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+
+            <!-- 현금결제 라디오 박스 그룹 -->
+            <div style="width: 48%;">
+                <label><input type="radio" name="payment" value="cash" checked> 현금결제</label>
+                <!-- 다른 결제 방식이 필요하면 추가하세요 -->
+            </div>
+
+            <!-- 금액 필드 그룹 -->
+            <div style="width: 48%; display: flex; flex-direction: column;">
+
+                <!-- 출고금액, 지원금액, 판매금액 -->
+                <div style="margin-bottom: 10px;">
+                    <label for="salesAmount">출고금액:</label>
+                    <input type="text" id="salesAmount" placeholder="출고금액 입력" readonly>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <label for="subsidyAmount">지원금액:</label>
+                    <input type="text" id="subsidyAmount" placeholder="지원금액 입력" readonly>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <label for="totalAmount">판매금액:</label>
+                    <input type="text" id="totalAmount" placeholder="판매금액 입력" readonly>
+                </div>
+
+                <!-- 납입금액, 차액, 결제금액 -->
+                <div style="margin-bottom: 10px;">
+                    <label for="receivedAmount">납입금액:</label>
+                    <input type="text" id="receivedAmount" placeholder="납입금액 입력" readonly>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <label for="differenceAmount">차액:</label>
+                    <input type="text" id="differenceAmount" placeholder="차액 입력" readonly>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <label for="paymentAmount">결제금액:</label>
+                    <input type="text" id="paymentAmount" placeholder="결제금액 입력">
+                </div>
+            </div>
+        </div>
         <button class="right-bottom" onclick="completeSale()">판매 완료</button>
     </section>
 </main>
