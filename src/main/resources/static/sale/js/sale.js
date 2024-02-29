@@ -38,6 +38,9 @@ document.addEventListener('DOMContentLoaded', function() {
     /* 단말 모델 전체 조회 */
     fetchDeviceInfos();
 
+    /* 요금제 전체 조회 */
+    fetchPlanInfos();
+
 });
 
 /**
@@ -208,5 +211,34 @@ function completeSale() {
     // 판매 완료 로직
     alert('판매가 완료되었습니다.');
 }
+
+/* 요금제 전체 조회 */
+async function fetchPlanInfos() {
+    try {
+        const planInfos = await $.ajax({
+            url: '/api/v1/plcys/retrieveAll',
+            type: 'GET',
+            success: function (planInfos) {
+                console.log("요금제 정보 조회 성공:", planInfos);
+                const planSelect = document.getElementById('plan');
+                planSelect.innerHTML = '<option value="">요금제 선택</option>';
+
+                /* 조회된 요금제 정보를 selectBox에 세팅 */
+                planInfos.forEach(function (planInfo) {
+                    const option = new Option(planInfo.planName, planInfo.planCode);
+                    planSelect.add(option);
+                });
+            },
+            error: function (error) {
+                console.error("요금제 정보 조회 실패:", error);
+                alert('요금제 정보를 조회할 수 없습니다.');
+            }
+        });
+    } catch (error) {
+        console.error("요금제 정보 조회 실패:", error);
+        alert('요금제 정보를 조회할 수 없습니다.');
+    }
+}
+
 
 
