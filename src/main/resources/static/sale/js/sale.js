@@ -84,6 +84,7 @@ function autoFormatPhoneNumber(event) {
 async function checkCustomer() {
     try {
         let phoneNumber = document.getElementById('tbx_custTelNumber').value.replace(/-/g, '');
+        var res = false;
 
         const response = await $.ajax({
             url: '/api/v1/sales/checkCustomer',
@@ -92,18 +93,19 @@ async function checkCustomer() {
             success: function(data) {
                 console.log("data : " + data);
                 if(data) {
+                    res = true;
                     alert('고객 확인 완료');
-                    // 다음 섹션 보이기
-                    document.getElementById('selectDevice').style.display = 'block';
                 }
-                else
+                else {
+                    res = false;
                     alert('존재하지 않는 고객입니다.');
+                }
             },
             error: function(error) {
                 console.log("error : " + error);
             }
         });
-        return data;
+        return res;
     }
     catch (error){
         return false;
