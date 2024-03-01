@@ -45,7 +45,7 @@
     </div>
     <section id="selectDevice">
         <h2>단말 선택</h2>
-        <select id="deviceModel">
+        <select id="deviceModel" onchange="onDeviceModelChange()">
             <option value="">단말기 모델 선택</option>
         </select>
         <input type="text" id="serialNumber" placeholder="단말 번호를 입력하세요">
@@ -53,7 +53,7 @@
     </section>
     <section id="selectPlan">
         <h2>요금제 선택</h2>
-        <select id="plan">
+        <select id="plan" onchange="onPlanChange()" >
             <option value="">요금제 선택</option>
         </select>
         <button class="right-bottom" onclick="selectPlan()">요금제 선택 완료</button>
@@ -62,10 +62,10 @@
         <h2>지원금 선택</h2>
         <div style="display: flex; justify-content: space-between;"> <!-- 가로로 배치 -->
             <div id="groupSufu">
-                <label><input type="radio" name="subsidy" value="sufu" checked> 공시지원금</label>
+                <label><input type="radio" name="subsidy" onchange="onSubsidyChange()"  value="sufu" checked> 공시지원금</label>
             </div>
             <div id="groupNoSufu">
-                <label><input type="radio" name="subsidy" value="noSufu"> 무약정</label>
+                <label><input type="radio" name="subsidy" onchange="onSubsidyChange()" value="noSufu"> 무약정</label>
             </div>
         </div>
         <button class="right-bottom" onclick="selectSubsidy()">지원금 선택 완료</button>
@@ -87,34 +87,35 @@
 
                 <!-- 출고금액, 지원금액, 판매금액 -->
                 <div style="margin-bottom: 10px;">
-                    <label for="salesAmount">출고금액:</label>
-                    <input type="text" id="salesAmount" placeholder="출고금액 입력" readonly>
+                    <label for="totalAmount">출고금액:</label>
+                    <input type="text" id="totalAmount" placeholder="출고금액 입력" value="0" readonly>
                 </div>
 
                 <div style="margin-bottom: 10px;">
                     <label for="subsidyAmount">지원금액:</label>
-                    <input type="text" id="subsidyAmount" placeholder="지원금액 입력" readonly>
+                    <input type="text" id="subsidyAmount" placeholder="지원금액 입력" value="0" readonly>
                 </div>
 
                 <div style="margin-bottom: 10px;">
-                    <label for="totalAmount">판매금액:</label>
-                    <input type="text" id="totalAmount" placeholder="판매금액 입력" readonly>
+                    <label for="salesAmount">판매금액:</label>
+                    <input type="text" id="salesAmount" placeholder="판매금액 입력" value="0" readonly>
                 </div>
 
                 <!-- 납입금액, 차액, 결제금액 -->
                 <div style="margin-bottom: 10px;">
                     <label for="receivedAmount">납입금액:</label>
-                    <input type="text" id="receivedAmount" placeholder="납입금액 입력" readonly>
+                    <input type="text" id="receivedAmount" placeholder="납입금액 입력" value="0" readonly>
                 </div>
 
                 <div style="margin-bottom: 10px;">
                     <label for="differenceAmount">차액:</label>
-                    <input type="text" id="differenceAmount" placeholder="차액 입력" readonly>
+                    <input type="text" id="differenceAmount" placeholder="차액 입력" value="0" readonly>
                 </div>
 
                 <div style="margin-bottom: 10px;">
                     <label for="paymentAmount">결제금액:</label>
-                    <input type="text" id="paymentAmount" placeholder="결제금액 입력">
+                    <!-- oninput 이벤트 추가 -->
+                    <input type="text" id="paymentAmount" placeholder="결제금액 입력" value="0" min="0" oninput="validatePaymentAmount(this.value)" onchange="onPaymentAmountChange(this.value)">
                 </div>
             </div>
         </div>
