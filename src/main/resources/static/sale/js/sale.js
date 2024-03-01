@@ -191,9 +191,21 @@ function fetchDeviceInventory() {
 }
 
 
+let selectedPlanCode;
 function selectPlan() {
+    var planName = document.getElementById('plan').value;
+    var selectedPlanInfo = allPlanInfos.find(plan => plan.planCode === planName);
+
+    selectedPlanCode = selectedPlanInfo.planCode;
+    console.log("요금제 정보 : " + selectedPlanInfo);
+    console.log("요금제 코드 : " + selectedPlanCode);
+    
+    if(selectedPlanInfo)
+        alert('요금제 선택 완료');
+    else
+        alert('요금제를 선택하세요.');
     // 요금제 선택 로직
-    alert('요금제 선택 완료');
+
     // 다음 섹션 보이기
     document.getElementById('selectPayment').style.display = 'block';
 }
@@ -214,9 +226,9 @@ function selectSubsidy() {
         salesAmount = selectedDeviceInfo.devicePrice;
 
     if (subsidyType === 'sufu') {
-        const deviceCode = 'SM-S911N'; // 단말기 코드 설정
-        const planCode = 'LPZ0000916'; // 요금제 코드 설정
-        const marketCode = 'LGT'; // 마켓 코드 설정 (쿼리 파라미터로 추가)
+        const deviceCode = document.getElementById('deviceModel').value; // 단말기 코드 설정
+        const planCode = selectedPlanCode; // 요금제 코드 설정
+        const marketCode = document.getElementById('marketCodeInput').value; // 마켓 코드 설정 (쿼리 파라미터로 추가)
 
         $.ajax({
             url: `/api/v1/public/subsidy/${deviceCode}/${planCode}`,
@@ -357,6 +369,7 @@ function sendSaleDataToServer(saleData) {
         });
 }
 
+let allPlanInfos = [];
 /* 요금제 전체 조회 */
 async function fetchPlanInfos() {
     try {
@@ -367,6 +380,7 @@ async function fetchPlanInfos() {
                 console.log("요금제 정보 조회 성공:", planInfos);
                 const planSelect = document.getElementById('plan');
                 planSelect.innerHTML = '<option value="">요금제 선택</option>';
+                allPlanInfos = planInfos;
 
                 /* 조회된 요금제 정보를 selectBox에 세팅 */
                 planInfos.forEach(function (planInfo) {
