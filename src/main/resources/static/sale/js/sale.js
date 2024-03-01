@@ -9,7 +9,7 @@ document.getElementById('refreshPage').addEventListener('click', function() {
  * @작성일자   : 2024-02-26
  */
 document.addEventListener('DOMContentLoaded', function() {
-    debugger;
+
 
     /** ■■■■■>>  고객 정보 전화번호 textBox */
     const phoneNumberTbx = document.getElementById('tbx_custTelNumber');
@@ -122,43 +122,39 @@ async function checkCustomer() {
 }
 
 /**
- * @name      : 단말 전체 정보 조회 api
+ * @name      : 단말 모델 전체 조회
  * @작성자     : 권유리
  * @수정자     :
- * @작성일자   : 2024-02-28
+ * @작성일자   : 2024-03-01
  */
+let allDeviceInfos = [];
 async function fetchDeviceInfos() {
-    debugger;
     try {
-        const deviceInfos = await $.ajax({
-            url: '/api/v1/device/deviceinfo/alldeviceinfo',
-            type: 'GET',
-            success: function(deviceInfos) {
-                debugger;
-                console.log("단말기 전체 정보 :", deviceInfos);
-                const deviceModelSelect = document.getElementById('deviceModel');
-                deviceModelSelect.innerHTML = '<option value="">단말기 모델 선택</option>';
+        const response = await fetch('/api/v1/device/deviceinfo/alldeviceinfo');
+        if (!response.ok) {
+            throw new Error('디바이스 정보를 가져오는 데 실패했습니다.');
+        }
+        const data = await response.json();
+        allDeviceInfos = data; // 받아온 모든 디바이스 정보를 전역 변수에 저장
+        console.log("디바이스 정보:", allDeviceInfos);
 
-                /* 조회된 단말기 정보를 selectBox에 세팅 */
-                deviceInfos.forEach(function(deviceInfo) {
-                    const option = new Option(deviceInfo.deviceName, deviceInfo.deviceCode);
-                    deviceModelSelect.add(option);
-                });
-
-            },
-            error: function(error) {
-                console.error("단말기 정보 조회 실패:", error);
-                alert('단말기 정보를 조회할 수 없습니다.');
-            }
+        // selectBox에 선택 옵션들을 추가
+        const deviceModelSelect = document.getElementById('deviceModel');
+        deviceModelSelect.innerHTML = ''; // 기존 옵션들을 모두 지우고 다시 채우기 위해 innerHTML을 초기화
+        data.forEach(device => {
+            const option = document.createElement('option');
+            option.value = device.deviceCode;
+            option.text = device.deviceName;
+            deviceModelSelect.appendChild(option);
         });
     } catch (error) {
-        console.error("단말기 정보 조회 실패:", error);
-        alert('단말기 정보를 조회할 수 없습니다.');
+        console.error('디바이스 정보 조회 실패:', error);
+        alert('디바이스 정보를 조회할 수 없습니다.');
     }
 }
 
 /**
- * @name      : 단말기 정보 조회 api
+ * @name      : 단말기 정보 조회 by 단말모델코드, 단말번호
  * @작성자     : 권유리
  * @수정자     :
  * @작성일자   : 2024-02-26
@@ -167,10 +163,10 @@ function fetchDeviceInventory() {
 
     let deviceCode = document.getElementById('deviceModel').value;
     let deviceNumber = document.getElementById('serialNumber').value;
-    deviceNumber = deviceNumber.padStart(20, '0');
 
     /* 단말기 유효성 체크 */
     if (!deviceCode || !deviceNumber) {
+        deviceNumber = deviceNumber.padStart(20, '0');
         alert('단말기 모델과 일련번호를 모두 입력해주세요.');
         return;
     }
@@ -215,14 +211,23 @@ function selectSubsidy() {
  */
 function completeSale() {
 
+    debugger;
+    /* 데이터 세팅 */
+    let subscriptionId = document.getElementById('customerIDInput').value;
+    let deviceCode = document.getElementById('deviceModel').value;
+    let deviceNumber = document.getElementById('serialNumber').value;
+    let planCode = document.getElementById('plan').value;
+    let subsidyAmount = "";
+    let paymentAmount = "";
 
-    const subscriptionId = document.getElementById('customerIDInput').value;
-    const deviceCode = document.getElementById('deviceModel').value;
-    const deviceNumber = document.getElementById('serialNumber').value;
-    const planCode = document.getElementById('plan').value;
-    const devicePrice = parseFloat(document.getElementById('salesAmount').value);
-    const subsidyAmount = parseFloat(document.getElementById('subsidyAmount').value);
-    const paymentAmount = parseFloat(document.getElementById('paymentAmount').value);
+    const selectedDeviceInfo = allDeviceInfos.find(device => device.deviceCode === deviceCode);
+    let devicePrice = "";
+    if (selectedDeviceInfo) {
+        devicePrice = selectedDeviceInfo.devicePrice;
+        console.log("선택된 디바이스의 가격:", devicePrice);
+    } else {
+        console.error("해당 deviceCode에 대한 디바이스 정보를 찾을 수 없습니다.");
+    }
 
     /* 유효성 체크 */
     if (!subscriptionId || !deviceCode || !deviceNumber || !planCode || isNaN(devicePrice) || isNaN(subsidyAmount) || isNaN(paymentAmount)) {
@@ -244,7 +249,6 @@ function completeSale() {
     /* 판매 처리 */
     sendSaleDataToServer(saleData);
 
-    alert('판매가 완료되었습니다.');
 }
 
 
@@ -252,7 +256,7 @@ function completeSale() {
  * @name      : 단말 판매 처리 api
  * @작성자     : 권유리
  * @수정자     :
- * @작성일자   : 2024-02-26
+ * @작성일자   : 2024-03-01
  */
 function sendSaleDataToServer(saleData) {
     fetch('/api/v1/sales/presales', {
@@ -266,12 +270,14 @@ function sendSaleDataToServer(saleData) {
             if (response.ok) {
                 alert('판매가 완료되었습니다.');
             } else {
-                alert('판매에 실패했습니다.');
+                return response.text().then(errorMsg => {
+                    throw new Error(`판매에 실패했습니다: ${errorMsg}`);
+                });
             }
         })
         .catch(error => {
             console.error('판매 요청 에러:', error);
-            alert('판매 요청 중 에러가 발생했습니다.');
+            alert('판매 요청 중 에러가 발생했습니다: ' + error.message);
         });
 }
 
