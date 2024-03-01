@@ -200,7 +200,54 @@ function selectPlan() {
 
 function selectSubsidy() {
     // 여기에 지원금 선택 처리 로직을 구현합니다.
-    alert("지원금 선택이 완료되었습니다.");
+    const subsidyType = $('input[name="subsidy"]:checked').val();
+    var salesAmount = 0;
+    var subsidyAmount = 0;
+    var totalAmount = 0;
+
+    var deviceCode = document.getElementById('deviceModel').value;
+    var selectedDeviceInfo = allDeviceInfos.find(device => device.deviceCode === deviceCode);
+    debugger;
+    if(isNaN(selectedDeviceInfo.devicePrice))
+        alert("단말기의 출고가격이 설정되어 있지 않습니다.");
+    else
+        salesAmount = selectedDeviceInfo.devicePrice;
+
+    if (subsidyType === 'sufu') {
+        const deviceCode = 'SM-S911N'; // 단말기 코드 설정
+        const planCode = 'LPZ0000916'; // 요금제 코드 설정
+        const marketCode = 'LGT'; // 마켓 코드 설정 (쿼리 파라미터로 추가)
+
+        $.ajax({
+            url: `/api/v1/public/subsidy/${deviceCode}/${planCode}`,
+            method: 'GET',
+            async: false,
+            success: function (data) {
+                const now = new Date();
+
+                debugger;
+                const validPolicies = data.filter(policy => {
+                    const startDatetime = new Date(policy.startDatetime);
+                    const endDatetime = new Date(policy.endDatetime);
+                    return policy.marketCode === marketCode && startDatetime <= now && endDatetime >= now;
+                });
+
+                console.log("validPolicies : " + validPolicies); // 응답 데이터 처리
+                subsidyAmount = validPolicies[0].supportAmount;
+                // 예: 데이터를 화면에 표시하는 로직 추가
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.error('Error fetching data: ', textStatus, errorThrown);
+            }
+        });
+    } else {
+        console.log('무약정 선택됨 - API 호출 안 함');
+        // 무약정 선택 시 수행할 작업
+    }
+    debugger;
+    $('#salesAmount').val(salesAmount);
+    $('#subsidyAmount').val(subsidyAmount);
+    $('#totalAmount').val(salesAmount-subsidyAmount);
 }
 
 /**
