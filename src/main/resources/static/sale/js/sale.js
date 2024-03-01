@@ -207,10 +207,66 @@ function selectSubsidy() {
     alert("지원금 선택이 완료되었습니다.");
 }
 
+/**
+* @name      : 단말판매 onclick 이벤트 함수
+* @작성자     : 권유리
+* @수정자     :
+* @작성일자   : 2024-03-01
+*/
 function completeSale() {
-    // 판매 완료 로직
-    alert('판매가 완료되었습니다.');
+
+    /**
+     * "가입ID", "단말기코드", "단말기번호", "요금제코드", "단말기가격", "지원금액", "판매금액"
+     */
+    const subscriptionId = document.getElementById('customerIDInput').value;
+    const deviceCode = document.getElementById('deviceModel').value;
+    const deviceNumber = document.getElementById('serialNumber').value;
+    const planCode = document.getElementById('plan').value;
+    const devicePrice = document.getElementById('devicePrice').value;
+    const subsidyAmount = parseFloat(document.getElementById('subsidyAmount').value);
+    const paymentAmount = parseFloat(document.getElementById('paymentAmount').value);
+
+    /* 필요 데이터 유효성 검사 */
+    if (!subscriptionId || !deviceCode || !deviceNumber || !planCode || isNaN(devicePrice) || isNaN(subsidyAmount) || isNaN(paymentAmount)) {
+        alert('판매에 필요한 데이터를 모두 입력하세요.');
+        return;
+    }
+
+    /* 판매 데이터 세팅 */
+    const saleData = setSaleData(subscriptionId, deviceCode, deviceNumber, planCode, devicePrice, subsidyAmount, paymentAmount);
+    console.log('판매 데이터:', saleData);
+
+    /* 단말판매 처리 */
+    sendSaleDataToServer(saleData);
+
 }
+
+
+/**
+ * @name      : 단말 판매 처리를 위한 데이터 세팅 함수
+ * @작성자     : 권유리
+ * @수정자     :
+ * @작성일자   : 2024-03-01
+ */
+function setSaleData(subscriptionId, deviceCode, deviceNumber, planCode, devicePrice, subsidyAmount, paymentAmount) {
+    return {
+        /**
+         * 고객Id
+         * 단말모델코드
+         * 단말번호
+         * 욕금제 코드
+         * 판매금액
+         */
+        subscription_id: subscriptionId,
+        device_code: deviceCode,
+        device_number: deviceNumber,
+        plan_code: planCode,
+        device_usage: devicePrice,
+        support_amt: subsidyAmount,
+        sale_amount: paymentAmount
+    };
+}
+
 
 /* 요금제 전체 조회 */
 async function fetchPlanInfos() {
@@ -240,5 +296,29 @@ async function fetchPlanInfos() {
     }
 }
 
-
-
+/**
+ * @name      : 단말판매 처리
+ * @작성자     : 권유리
+ * @수정자     :
+ * @작성일자   : 2024-03-01
+ */
+function sendSaleDataToServer(saleData){
+    fetch('/api/v1/sales/presales', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(saleData)
+    })
+        .then(response => {
+            if (response.ok) {
+                alert('판매가 완료되었습니다.');
+            } else {
+                alert('판매에 실패했습니다.');
+            }
+        })
+        .catch(error => {
+            console.error('판매 요청 에러:', error);
+            alert('판매 요청 중 에러가 발생했습니다.');
+        });
+}
