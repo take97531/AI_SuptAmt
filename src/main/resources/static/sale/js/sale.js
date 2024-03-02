@@ -213,7 +213,6 @@ function selectPlan() {
 
 function selectSubsidy() {
     // 여기에 지원금 선택 처리 로직을 구현합니다.
-<<<<<<< HEAD
     const subsidyType = $('input[name="subsidy"]:checked').val();
     var salesAmount = 0;
     var subsidyAmount = 0;
@@ -262,19 +261,7 @@ function selectSubsidy() {
     $('#salesAmount').val(salesAmount);
     $('#subsidyAmount').val(subsidyAmount);
     $('#totalAmount').val(salesAmount-subsidyAmount);
-=======
     alert("지원금 선택이 완료되었습니다.");
-
-    //금액필드 세팅 수정필요 - 이정호선임님
-    //출고금액
-    document.getElementById("totalAmount").value = 1000000;
-    //지원금액
-    document.getElementById("subsidyAmount").value = 300000;
-    //판매금액
-    document.getElementById("salesAmount").value = 700000;
-    //차액
-    document.getElementById("differenceAmount").value = 700000;
->>>>>>> 4b2c8fc1bb2b2a7278f9b3962f1d7bfe2098b93a
 }
 
 /**
