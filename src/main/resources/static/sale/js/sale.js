@@ -224,7 +224,7 @@ function selectSubsidy() {
     if(isNaN(selectedDeviceInfo.devicePrice))
         alert("단말기의 출고가격이 설정되어 있지 않습니다.");
     else
-        salesAmount = selectedDeviceInfo.devicePrice;
+        totalAmount = selectedDeviceInfo.devicePrice;
 
     if (subsidyType === 'sufu') {
         const deviceCode = document.getElementById('deviceModel').value; // 단말기 코드 설정
@@ -258,9 +258,9 @@ function selectSubsidy() {
         // 무약정 선택 시 수행할 작업
     }
     debugger;
-    $('#salesAmount').val(salesAmount);
+    $('#totalAmount').val(totalAmount);
     $('#subsidyAmount').val(subsidyAmount);
-    $('#totalAmount').val(salesAmount-subsidyAmount);
+    $('#salesAmount').val(totalAmount-subsidyAmount);
     alert("지원금 선택이 완료되었습니다.");
 }
 
