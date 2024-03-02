@@ -180,6 +180,7 @@ function fetchDeviceInventory() {
         },
         success: function(response) {
             alert("단말기 선택 완료");
+
             console.log('선택 단말 정보 :', response);
 
         },
@@ -212,6 +213,7 @@ function selectPlan() {
 
 function selectSubsidy() {
     // 여기에 지원금 선택 처리 로직을 구현합니다.
+<<<<<<< HEAD
     const subsidyType = $('input[name="subsidy"]:checked').val();
     var salesAmount = 0;
     var subsidyAmount = 0;
@@ -260,7 +262,87 @@ function selectSubsidy() {
     $('#salesAmount').val(salesAmount);
     $('#subsidyAmount').val(subsidyAmount);
     $('#totalAmount').val(salesAmount-subsidyAmount);
+=======
+    alert("지원금 선택이 완료되었습니다.");
+
+    //금액필드 세팅 수정필요 - 이정호선임님
+    //출고금액
+    document.getElementById("totalAmount").value = 1000000;
+    //지원금액
+    document.getElementById("subsidyAmount").value = 300000;
+    //판매금액
+    document.getElementById("salesAmount").value = 700000;
+    //차액
+    document.getElementById("differenceAmount").value = 700000;
+>>>>>>> 4b2c8fc1bb2b2a7278f9b3962f1d7bfe2098b93a
 }
+
+/**
+ * @name      : 납입금액 계산
+ * @작성자     : 유안수
+ * @수정자     :
+ * @작성일자   : 2024-03-02
+ */
+function onPaymentAmountChange(inputValue) {
+    // 입력값 가져오기
+    var paymentAmount = parseFloat(inputValue);
+
+    // 결제금액이 입력되었는지 확인
+
+    if (!isNaN(paymentAmount)) {
+        // 납입금액 계산 및 결과를 납입금액 필드에 입력
+        var receivedAmount = paymentAmount;
+        document.getElementById("receivedAmount").value = receivedAmount.toFixed(0); // 소수점 아래 절삭
+
+        // 차액 계산 및 결과를 차액 필드에 입력
+        var salesAmount = parseFloat(document.getElementById("salesAmount").value);
+        var differenceAmount = salesAmount - receivedAmount;
+
+        // 판매금액 - 납입금액이 0보다 작을 경우
+        if (differenceAmount < 0) {
+            alert("납입금액이 판매금액을 초과하였습니다.");
+
+            // 납입금액, 차액, 결제금액을 0으로 설정
+            document.getElementById("receivedAmount").value = "0";
+            document.getElementById("differenceAmount").value = (salesAmount - receivedAmount).toFixed(0); // 차액을 판매금액 - 납입금액으로 설정
+            document.getElementById("paymentAmount").value = "0";
+
+            onPaymentAmountChange("0");
+        } else {
+            // 차액이 0보다 크거나 같으면 차액을 입력
+            document.getElementById("differenceAmount").value = differenceAmount.toFixed(0); // 소수점 아래 절삭
+        }
+    } else{
+        onPaymentAmountChange("0");
+    }
+}
+/**
+ * @name      : 결제금액 입력 필드에 숫자만 입력 가능하도록 설정
+ * @작성자     : 유안수
+ * @수정자     :
+ * @작성일자   : 2024-03-02
+ */
+function validatePaymentAmount(input) {
+    debugger;
+    const inputValue = input;
+
+    // 정규식을 사용하여 숫자만 허용하도록 함
+    const numericValue = inputValue.replace(/[^0-9]/g, '');
+    document.getElementById("paymentAmount").value = numericValue;
+}
+/**
+ * @name      : 금액필드 초기화
+ * @작성자     : 유안수
+ * @수정자     :
+ * @작성일자   : 2024-03-02
+ */
+function resetAmountFields() {
+    const amountFields = document.querySelectorAll('#selectPayment input[type="text"]');
+    amountFields.forEach(function(field) {
+        field.value = '0';
+    });
+}
+
 
 /**
  * @name      : 단말기 판매 onclick 이벤트 시 수행되는 함수
@@ -288,9 +370,23 @@ function completeSale() {
         console.error("해당 deviceCode에 대한 디바이스 정보를 찾을 수 없습니다.");
     }
 
-    /* 유효성 체크 */
-    if (!subscriptionId || !deviceCode || !deviceNumber || !planCode || isNaN(devicePrice) || isNaN(subsidyAmount) || isNaN(paymentAmount)) {
-        alert('판매에 필요한 데이터를 모두 입력하세요.');
+    /* 고객 정보가 없을 경우 작업을 막고 메시지를 표시 */
+    if (!validateCustomerInfo()) {
+        return;
+    }
+
+    /* 단말기 모델코드와 일련번호가 설정되지 않은 경우 경고 메시지 표시 */
+    if (!validateDeviceData()) {
+        return;
+    }
+
+    /* 요금제가 선택되지 않은 경우 작업을 막고 메시지를 표시 */
+    if (!validatePlanSelection()) {
+        return;
+    }
+
+    /* 출고금액이 0원이거나 차액이 0원이 아닌 경우 작업을 막고 메시지를 표시 */
+    if (!validateSaleAmount()) {
         return;
     }
 
@@ -399,5 +495,108 @@ async function fetchPlanInfos() {
     }
 }
 
+/**
+ * @name      : 고객 정보 유효성 검사 함수
+ * @작성자     : 유안수
+ * @수정자     :
+ * @작성일자   : 2024-03-01
+ */
+function validateCustomerInfo() {
+    let customerId = document.getElementById('customerIDInput').value;
 
+    if (!customerId) {
+        alert('고객 정보가 없습니다. 판매를 진행할 수 없습니다.');
+        return false;
+    }
 
+    return true;
+}
+
+/**
+ * @name      : 단말기 모델코드와 일련번호 유효성 검사 함수
+ * @작성자     : 유안수
+ * @수정자     :
+ * @작성일자   : 2024-03-02
+ */
+function validateDeviceData() {
+    let deviceModelCode = document.getElementById('deviceModel').value;
+    let serialNumber = document.getElementById('serialNumber').value;
+
+    if (!deviceModelCode || !serialNumber) {
+        alert('단말기 모델과 일련번호를 모두 입력해주세요.');
+        return false;
+    }
+
+    return true;
+}
+/**
+ * @name      : 요금제 선택 여부 유효성 검사 함수
+ * @작성자     : 유안수
+ * @수정자     :
+ * @작성일자   : 2024-03-02
+ */
+function validatePlanSelection() {
+    let planCode = document.getElementById('plan').value;
+
+    if (!planCode) {
+        alert('요금제를 선택해주세요.');
+        return false;
+    }
+
+    return true;
+}
+/**
+ * @name      : 출고금액 및 차액 유효성 검사 함수
+ * @작성자     : 유안수
+ * @수정자     :
+ * @작성일자   : 2024-03-02
+ */
+function validateSaleAmount() {
+    let totalAmount = parseFloat(document.getElementById('totalAmount').value) || 0;
+    let differenceAmount = parseFloat(document.getElementById('differenceAmount').value) || 0;
+
+    if (totalAmount === 0) {
+        alert('출고금액이 0원이므로 판매가 불가능합니다. 단말기 또는 요금제를 확인해주세요.');
+        return false;
+    }
+
+    if (differenceAmount !== 0) {
+        alert('결제가 완료되지 않아 판매가 불가능합니다.');
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * @name      : 단말기 모델 선택 변경 시 이벤트 처리 함수
+ * @작성자     : 유안수
+ * @수정자     :
+ * @작성일자   : 2024-03-02
+ */
+function onDeviceModelChange() {
+    // 단말기 모델 선택이 변경되었을 때, 금액 필드 초기화
+    resetAmountFields();
+}
+
+/**
+ * @name      : 요금제 선택 변경 시 이벤트 처리 함수
+ * @작성자     : 유안수
+ * @수정자     :
+ * @작성일자   : 2024-03-02
+ */
+function onPlanChange() {
+    // 요금제 선택이 변경되었을 때, 금액 필드 초기화
+    resetAmountFields();
+}
+
+/**
+ * @name      : 지원금 라디오 버튼 변경 시 이벤트 처리 함수
+ * @작성자     : 유안수
+ * @수정자     :
+ * @작성일자   : 2024-03-02
+ */
+function onSubsidyChange() {
+    // 지원금 라디오 버튼이 변경되었을 때, 금액 필드 초기화
+    resetAmountFields();
+}
