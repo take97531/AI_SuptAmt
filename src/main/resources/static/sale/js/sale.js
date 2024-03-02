@@ -131,22 +131,25 @@ let allDeviceInfos = [];
 async function fetchDeviceInfos() {
     try {
         const response = await fetch('/api/v1/device/deviceinfo/alldeviceinfo');
+
         if (!response.ok) {
             throw new Error('디바이스 정보를 가져오는 데 실패했습니다.');
         }
+
         const data = await response.json();
         allDeviceInfos = data; /* 받아온 모든 디바이스 정보를 전역 변수에 저장 */
         console.log("디바이스 정보:", allDeviceInfos);
 
-        // selectBox에 선택 옵션들을 추가
         const deviceModelSelect = document.getElementById('deviceModel');
-        deviceModelSelect.innerHTML = ''; // 기존 옵션들을 모두 지우고 다시 채우기 위해 innerHTML을 초기화
+        deviceModelSelect.innerHTML = '';
+
         data.forEach(device => {
             const option = document.createElement('option');
             option.value = device.deviceCode;
             option.text = device.deviceName;
             deviceModelSelect.appendChild(option);
         });
+
     } catch (error) {
         console.error('디바이스 정보 조회 실패:', error);
         alert('디바이스 정보를 조회할 수 없습니다.');
@@ -199,6 +202,7 @@ function fetchDeviceInventory() {
 
 let selectedPlanCode;
 function selectPlan() {
+
     var planName = document.getElementById('plan').value;
     var selectedPlanInfo = allPlanInfos.find(plan => plan.planCode === planName);
 
@@ -210,13 +214,14 @@ function selectPlan() {
         alert('요금제 선택 완료');
     else
         alert('요금제를 선택하세요.');
-    // 요금제 선택 로직
 
-    // 다음 섹션 보이기
-    document.getElementById('selectPayment').style.display = 'block';
+
+    /* 다음 섹션 보이기
+    document.getElementById('selectPayment').style.display = 'block'; */
 }
 
 function selectSubsidy() {
+    debugger;
     // 여기에 지원금 선택 처리 로직을 구현합니다.
     const subsidyType = $('input[name="subsidy"]:checked').val();
     var salesAmount = 0;
@@ -345,14 +350,14 @@ function resetAmountFields() {
 function completeSale() {
 
     debugger;
-    /* 데이터 세팅 */
+
+    /* 가입Id, 단말코드, 단말번호, 요금제코드 세팅 */
     let subscriptionId = document.getElementById('customerIDInput').value;
     let deviceCode = document.getElementById('deviceModel').value;
     let deviceNumber = document.getElementById('serialNumber').value;
     let planCode = document.getElementById('plan').value;
-    let subsidyAmount = "";
-    let paymentAmount = "";
 
+    /* 단말 가격 세팅 */
     const selectedDeviceInfo = allDeviceInfos.find(device => device.deviceCode === deviceCode);
     let devicePrice = "";
     if (selectedDeviceInfo) {
@@ -361,6 +366,12 @@ function completeSale() {
     } else {
         console.error("해당 deviceCode에 대한 디바이스 정보를 찾을 수 없습니다.");
     }
+
+    /* 지원금액 세팅 */
+    let subsidyAmount = "";
+
+    /* 판매금액 세팅 */
+    let paymentAmount = "";
 
     /* 고객 정보가 없을 경우 작업을 막고 메시지를 표시 */
     if (!validateCustomerInfo()) {
@@ -384,13 +395,13 @@ function completeSale() {
 
     /* 판매 데이터 세팅 */
     const saleData = {
-        subscription_id: subscriptionId,
-        device_code: deviceCode,
-        device_number: deviceNumber,
-        plan_code: planCode,
-        device_usage: devicePrice,
-        support_amt: subsidyAmount,
-        sale_amount: paymentAmount
+        subscriptionId: subscriptionId,
+        deviceCode: deviceCode,
+        deviceNumber: deviceNumber,
+        planCode: planCode,
+        devicePrice: devicePrice,
+        supportAmount: subsidyAmount,
+        saleAmount: paymentAmount
     };
 
     /* 판매 처리 */
