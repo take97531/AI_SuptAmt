@@ -1,9 +1,9 @@
-package com.example.SuptPlcy.service;
+package com.example.suptplcy.service;
 
-import com.example.SuptPlcy.dto.DeviceSubsidyPolicyDTO;
-import com.example.SuptPlcy.entity.DeviceSubsidyPolicyEntity;
-import com.example.SuptPlcy.entity.DeviceSubsidyPolicyMapper;
-import com.example.SuptPlcy.repository.DeviceSubsidyPolicyRepository;
+import com.example.suptplcy.dto.DeviceSubsidyPolicyDTO;
+import com.example.suptplcy.entity.DeviceSubsidyPolicyEntity;
+import com.example.suptplcy.entity.DeviceSubsidyPolicyMapper;
+import com.example.suptplcy.repository.DeviceSubsidyPolicyRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

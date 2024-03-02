@@ -1,6 +1,6 @@
-package com.example.SuptPlcy.entity;
+package com.example.suptplcy.entity;
 
-import com.example.SuptPlcy.dto.DeviceSubsidyPolicyDTO;
+import com.example.suptplcy.dto.DeviceSubsidyPolicyDTO;
 import org.mapstruct.Mapper;
 
 import java.util.List;

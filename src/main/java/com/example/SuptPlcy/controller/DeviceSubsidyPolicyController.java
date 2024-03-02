@@ -1,8 +1,8 @@
-package com.example.SuptPlcy.controller;
+package com.example.suptplcy.controller;
 
-import com.example.SuptPlcy.dto.DeviceSubsidyPolicyDTO;
-import com.example.SuptPlcy.entity.DeviceSubsidyPolicyEntity;
-import com.example.SuptPlcy.service.DeviceSubsidyPolicyService;
+import com.example.suptplcy.dto.DeviceSubsidyPolicyDTO;
+import com.example.suptplcy.entity.DeviceSubsidyPolicyEntity;
+import com.example.suptplcy.service.DeviceSubsidyPolicyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

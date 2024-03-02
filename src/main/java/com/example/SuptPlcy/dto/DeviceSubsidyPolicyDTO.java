@@ -1,4 +1,4 @@
-package com.example.SuptPlcy.dto;
+package com.example.suptplcy.dto;
 
 import jakarta.persistence.Column;
 import lombok.Builder;
