@@ -1,4 +1,4 @@
-package com.example.SuptPlcy.entity;
+package com.example.suptplcy.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

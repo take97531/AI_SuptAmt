@@ -1,6 +1,6 @@
-package com.example.SuptPlcy.repository;
+package com.example.suptplcy.repository;
 
-import com.example.SuptPlcy.entity.DeviceSubsidyPolicyEntity;
+import com.example.suptplcy.entity.DeviceSubsidyPolicyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
