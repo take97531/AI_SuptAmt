@@ -135,7 +135,7 @@ async function fetchDeviceInfos() {
             throw new Error('디바이스 정보를 가져오는 데 실패했습니다.');
         }
         const data = await response.json();
-        allDeviceInfos = data; // 받아온 모든 디바이스 정보를 전역 변수에 저장
+        allDeviceInfos = data; /* 받아온 모든 디바이스 정보를 전역 변수에 저장 */
         console.log("디바이스 정보:", allDeviceInfos);
 
         // selectBox에 선택 옵션들을 추가
@@ -165,11 +165,16 @@ function fetchDeviceInventory() {
     let deviceNumber = document.getElementById('serialNumber').value;
 
     /* 단말기 유효성 체크 */
-    if (!deviceCode || !deviceNumber) {
-        deviceNumber = deviceNumber.padStart(20, '0');
-        alert('단말기 모델과 일련번호를 모두 입력해주세요.');
+    if (deviceCode == null || deviceCode === '') {
+        alert('단말기 모델을 선택해주세요.');
         return;
     }
+
+    if (deviceNumber == null || deviceNumber === '') {
+        alert('단말기 번호를 입력하세요.');
+        return;
+    }
+    deviceNumber = deviceNumber.padStart(20, '0');
 
     $.ajax({
         url: '/api/v1/device/deviceinventory/device-inventory',
