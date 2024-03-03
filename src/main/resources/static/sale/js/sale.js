@@ -399,7 +399,7 @@ function completeSale() {
     const saleData = {
         subscriptionId: subscriptionId,
         deviceCode: deviceCode,
-        deviceNumber: deviceNumber,
+        deviceNumber: deviceNumber.padStart(20, '0'),
         planCode: planCode,
         devicePrice: devicePrice,
         supportAmount: subsidyAmount,
