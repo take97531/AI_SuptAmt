@@ -1,4 +1,4 @@
-package com.example.SuptPlcy.entity;
+package com.example.suptplcy.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -33,9 +33,6 @@ public class DeviceSubsidyPolicyEntity {
     @Column(name = "DEVICE_CODE")
     private String deviceCode;
 
-    @Column(name = "DEVICE_AMOUNT")
-    private double deviceAmount;
-
     @Column(name = "SUPPORT_AMOUNT")
     private double supportAmount;
 
@@ -60,5 +57,5 @@ public class DeviceSubsidyPolicyEntity {
     @Column(name = "UPDATE_DATETIME")
     private LocalDateTime updateDatetime;
 
-    // Getters and Setters 생략
+
 }

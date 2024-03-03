@@ -1,4 +1,4 @@
-package com.example.SuptPlcy.dto;
+package com.example.suptplcy.dto;
 
 import jakarta.persistence.Column;
 import lombok.Builder;
@@ -16,7 +16,6 @@ public class DeviceSubsidyPolicyDTO {
     private LocalDateTime endDatetime;
     private String discountType;
     private String deviceCode;
-    private double deviceAmount;
     private double supportAmount;
     private String planCode;
     private String createdBy;
@@ -31,7 +30,7 @@ public class DeviceSubsidyPolicyDTO {
     }
 
     public DeviceSubsidyPolicyDTO(int deviceSubsidyPolicyId, String marketCode, LocalDateTime startDatetime, LocalDateTime endDatetime,
-    String discountType, String deviceCode, double deviceAmount, double supportAmount, String planCode, String createdBy, String createProgram, LocalDateTime createDatetime, String updatedBy,
+    String discountType, String deviceCode,  double supportAmount, String planCode, String createdBy, String createProgram, LocalDateTime createDatetime, String updatedBy,
     String updateProgram, LocalDateTime updateDatetime){
         this.deviceSubsidyPolicyId = deviceSubsidyPolicyId;
         this.marketCode = marketCode;
@@ -39,7 +38,6 @@ public class DeviceSubsidyPolicyDTO {
         this.endDatetime = endDatetime;
         this.discountType = discountType;
         this.deviceCode = deviceCode;
-        this.deviceAmount = deviceAmount;
         this.supportAmount = supportAmount;
         this.planCode = planCode;
         this.createdBy = createdBy;
