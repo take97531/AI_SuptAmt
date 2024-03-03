@@ -1,7 +1,6 @@
 package com.example.device.entity;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +13,8 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @Table(name = "device_inventory")
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@EqualsAndHashCode(callSuper = false)
 public class DeviceInventoryEntity {
 
     @Id

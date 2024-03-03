@@ -2,6 +2,10 @@ package com.example.device.repository;
 
 import com.example.device.entity.DeviceInventoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -12,4 +16,14 @@ import java.util.Optional;
  */
 public interface DeviceInventoryRepository extends JpaRepository<DeviceInventoryEntity, String> {
     Optional<DeviceInventoryEntity> findByDeviceCodeAndDeviceNumber(String deviceCode, String deviceNumber);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE DeviceInventoryEntity d " +
+            "SET d.deviceUsage = :deviceUsage " +
+            "WHERE d.deviceCode = :deviceCode AND d.deviceNumber = :deviceNumber")
+    void updateDeviceUsage(@Param("deviceCode") String deviceCode,
+                           @Param("deviceNumber") String deviceNumber,
+                           @Param("deviceUsage") String deviceUsage);
+
 }

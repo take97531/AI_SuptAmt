@@ -53,9 +53,14 @@ public class SalePrssService {
 
             if (deviceInventoryDTO.isPresent()) {
                 DeviceInventoryDTO deviceInventory = deviceInventoryDTO.get();
-                deviceInventory.setDeviceUsage("Y");
-                deviceInventoryRepository.save(deviceInventoryMapper.toDeviceInventoryEntity(deviceInventory));
+                //deviceInventory.setDeviceUsage("Y");
+                //deviceInventoryRepository.save(deviceInventoryMapper.toDeviceInventoryEntity(deviceInventory));
+                deviceInventoryRepository.updateDeviceUsage(deviceInventory.getDeviceCode(), deviceInventory.getDeviceNumber(), "Y");
+
             }
+
+
+
 
 
             /*// 계약정보 update
