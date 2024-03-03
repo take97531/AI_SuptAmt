@@ -1,6 +1,7 @@
 package com.example.sales.service;
 
 import ch.qos.logback.classic.Logger;
+import com.example.contract.dto.ContractInfoDTO;
 import com.example.contract.entity.ContractInfoEntity;
 import com.example.contract.repository.ContractInfoRepository;
 import com.example.device.dto.DeviceInventoryDTO;
@@ -41,37 +42,30 @@ public class SalePrssService {
 
         try{
             // 단말재고정보 테이블 상태 update
-            /*Optional<DeviceInventoryEntity> optionalDeviceInventory = deviceInventoryRepository.findByDeviceCodeAndDeviceNumber(salePrssDTO.getDeviceCode(), salePrssDTO.getDeviceNumber());
-            if (optionalDeviceInventory.isPresent()) {
-                DeviceInventoryEntity deviceInventory = optionalDeviceInventory.get();
-                deviceInventory.setDeviceUsage("Y");
-                deviceInventoryRepository.save(deviceInventory);
-            }*/
 
             Optional<DeviceInventoryDTO> deviceInventoryDTO =
                     deviceInventoryService.findByCodeAndNumber(salePrssDTO.getDeviceCode(), salePrssDTO.getDeviceNumber());
 
             if (deviceInventoryDTO.isPresent()) {
                 DeviceInventoryDTO deviceInventory = deviceInventoryDTO.get();
-                //deviceInventory.setDeviceUsage("Y");
-                //deviceInventoryRepository.save(deviceInventoryMapper.toDeviceInventoryEntity(deviceInventory));
                 deviceInventoryRepository.updateDeviceUsage(deviceInventory.getDeviceCode(), deviceInventory.getDeviceNumber(), "Y");
-
             }
 
 
 
 
 
-            /*// 계약정보 update
-            Optional<ContractInfoEntity> optionalSubscriptionInfo = contractInfoRepository.findBySubscriptionId(salePrssDTO.getSubscriptionId());
-            if (optionalSubscriptionInfo.isPresent()) {
-                ContractInfoEntity subscriptionInfo = optionalSubscriptionInfo.get();
-                subscriptionInfo.setDeviceCode(salePrssDTO.getDeviceCode());
-                subscriptionInfo.setDeviceNumber(salePrssDTO.getDeviceNumber());
-                subscriptionInfo.setPlanCode(salePrssDTO.getPlanCode());
-                subscriptionInfo.setContractDatetime(now);
-                contractInfoRepository.save(subscriptionInfo);
+            // 계약정보 update
+            Optional<ContractInfoDTO> contractInfoDTOs = contractInfoRepository.findBySubscriptionId(salePrssDTO.getSubscriptionId())
+                    .map(this::convertToDTO);
+
+            if (contractInfoDTOs.isPresent()) {
+                ContractInfoDTO contractInfoDTO = contractInfoDTOs.get();
+                contractInfoRepository.updateContractInfo(salePrssDTO.getSubscriptionId(),
+                        salePrssDTO.getDeviceCode(),
+                        salePrssDTO.getDeviceNumber(),
+                        salePrssDTO.getPlanCode(),
+                        now);
             }
 
             // 판매정보 update
@@ -90,12 +84,30 @@ public class SalePrssService {
             saleInfo.setCreateDatetime(now);
 
             saleInfoRepository.save(saleInfo);
-*/
+
             rslt.setRsltMsg("판매성공");
             rslt.setRsltCd("Y");
         } catch(Exception e){
             throw new Exception("판매에 실패하였습니다.", e);
         }
         return rslt;
+    }
+
+    private ContractInfoDTO convertToDTO(ContractInfoEntity contractInfoEntity) {
+
+        return new ContractInfoDTO(
+                contractInfoEntity.getContractId(),
+                contractInfoEntity.getSubscriptionId(),
+                contractInfoEntity.getDeviceCode(),
+                contractInfoEntity.getDeviceNumber(),
+                contractInfoEntity.getPlanCode(),
+                contractInfoEntity.getContractDatetime(),
+                contractInfoEntity.getCreatedBy(),
+                contractInfoEntity.getCreateProgram(),
+                contractInfoEntity.getCreateDatetime(),
+                contractInfoEntity.getUpdatedBy(),
+                contractInfoEntity.getUpdateProgram(),
+                contractInfoEntity.getUpdateDatetime()
+        );
     }
 }
