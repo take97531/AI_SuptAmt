@@ -35,22 +35,22 @@ public class SalePrssService {
         try{
             // 단말재고정보 테이블 상태 update
             Optional<DeviceInventoryEntity> optionalDeviceInventory = deviceInventoryRepository.findByDeviceCodeAndDeviceNumber(salePrssDTO.getDeviceCode(), salePrssDTO.getDeviceNumber());
-            if (optionalDeviceInventory.isPresent()) {
+            //if (optionalDeviceInventory.isPresent()) {
                 DeviceInventoryEntity deviceInventory = optionalDeviceInventory.get();
                 deviceInventory.setDeviceUsage("Y");
                 deviceInventoryRepository.save(deviceInventory);
-            }
+            //}
 
             // 계약정보 update
             Optional<ContractInfoEntity> optionalSubscriptionInfo = contractInfoRepository.findBySubscriptionId(salePrssDTO.getSubscriptionId());
-            if (optionalSubscriptionInfo.isPresent()) {
+            //if (optionalSubscriptionInfo.isPresent()) {
                 ContractInfoEntity subscriptionInfo = optionalSubscriptionInfo.get();
                 subscriptionInfo.setDeviceCode(salePrssDTO.getDeviceCode());
                 subscriptionInfo.setDeviceNumber(salePrssDTO.getDeviceNumber());
                 subscriptionInfo.setPlanCode(salePrssDTO.getPlanCode());
                 subscriptionInfo.setContractDatetime(now);
                 contractInfoRepository.save(subscriptionInfo);
-            }
+            //}
 
             // 판매정보 update
             SaleInfoEntity saleInfo = new SaleInfoEntity();
