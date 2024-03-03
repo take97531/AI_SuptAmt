@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Screen</title>
+    <style>
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            outline: none;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 9px #999;
+        }
+
+        .button:hover {background-color: #3e8e41}
+
+        .button:active {
+            background-color: #3e8e41;
+            box-shadow: 0 5px #666;
+            transform: translateY(4px);
+        }
+    </style>
+</head>
+<body>
+
+<h2>Welcome to the Main Screen</h2>
+
+<!-- 단말기 판매 버튼 -->
+<a href="http://localhost:8080/sale/html/sale.html" class="button">단말기판매</a>
+
+<!-- 지원금 조회 버튼 -->
+<a href="http://localhost:8080/plcy/retrieve.html" class="button">지원금조회</a>
+
+<!-- 지원금 등록 버튼 -->
+<a href="http://localhost:8080/plcy/create.html" class="button">지원금등록</a>
+
+</body>
+</html>
