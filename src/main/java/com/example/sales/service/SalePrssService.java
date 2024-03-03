@@ -5,6 +5,7 @@ import com.example.contract.entity.ContractInfoEntity;
 import com.example.contract.repository.ContractInfoRepository;
 import com.example.device.dto.DeviceInventoryDTO;
 import com.example.device.entity.DeviceInventoryEntity;
+import com.example.device.mapper.DeviceInventoryMapper;
 import com.example.device.repository.DeviceInventoryRepository;
 import com.example.device.service.DeviceInventoryService;
 import com.example.sales.dto.RsltDTO;
@@ -24,11 +25,14 @@ public class SalePrssService {
 
     private final DeviceInventoryService deviceInventoryService;
 
-    public SalePrssService(SaleInfoRepository saleInfoRepository, DeviceInventoryRepository deviceInventoryRepository, ContractInfoRepository contractInfoRepository, DeviceInventoryService deviceInventoryService) {
+    private final DeviceInventoryMapper deviceInventoryMapper;
+
+    public SalePrssService(SaleInfoRepository saleInfoRepository, DeviceInventoryRepository deviceInventoryRepository, ContractInfoRepository contractInfoRepository, DeviceInventoryService deviceInventoryService, DeviceInventoryMapper deviceInventoryMapper) {
         this.saleInfoRepository = saleInfoRepository;
         this.deviceInventoryRepository = deviceInventoryRepository;
         this.contractInfoRepository = contractInfoRepository;
         this.deviceInventoryService = deviceInventoryService;
+        this.deviceInventoryMapper = deviceInventoryMapper;
     }
 
     public RsltDTO salePrss (SalePrssDTO salePrssDTO) throws Exception {
@@ -48,13 +52,10 @@ public class SalePrssService {
                     deviceInventoryService.findByCodeAndNumber(salePrssDTO.getDeviceCode(), salePrssDTO.getDeviceNumber());
 
             if (deviceInventoryDTO.isPresent()) {
-                throw new Exception("물류정보 조회 성공 : " + deviceInventoryDTO.get().getDeviceCode());
-                //DeviceInventoryDTO deviceInventory = deviceInventoryDTO.get();
-                //deviceInventory.setDeviceUsage("Y");
-                // deviceInventoryRepository.save(DeviceInventory);
+                DeviceInventoryDTO deviceInventory = deviceInventoryDTO.get();
+                deviceInventory.setDeviceUsage("Y");
+                deviceInventoryRepository.save(deviceInventoryMapper.toDeviceInventoryEntity(deviceInventory));
             }
-
-            throw new Exception("물류 정보 없음.");
 
 
             /*// 계약정보 update
@@ -84,11 +85,12 @@ public class SalePrssService {
             saleInfo.setCreateDatetime(now);
 
             saleInfoRepository.save(saleInfo);
-
+*/
             rslt.setRsltMsg("판매성공");
-            rslt.setRsltCd("Y");*/
+            rslt.setRsltCd("Y");
         } catch(Exception e){
             throw new Exception("판매에 실패하였습니다.", e);
         }
+        return rslt;
     }
 }
