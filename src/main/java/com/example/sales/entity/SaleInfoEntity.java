@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 public class SaleInfoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sale_seq")
+    @SequenceGenerator(name = "sale_seq", sequenceName = "sale_id_sequence", allocationSize = 1)
     @Column(name = "SALE_ID")
     private String saleId;
 

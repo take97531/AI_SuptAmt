@@ -1,5 +1,6 @@
 package com.example.sales.controller;
 
+import com.example.sales.dto.RsltDTO;
 import com.example.sales.dto.SalePrssDTO;
 import com.example.sales.service.SalePrssService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class SalePrssController {
     private SalePrssService SalePrssService;
 
     @PostMapping ("/presales")
-    public void salePrss(@RequestBody SalePrssDTO salePrssDTO) {
-        SalePrssService.salePrss(salePrssDTO);
+    public RsltDTO salePrss(@RequestBody SalePrssDTO salePrssDTO) throws Exception {
+        return SalePrssService.salePrss(salePrssDTO);
     }
 }
