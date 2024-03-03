@@ -10,8 +10,6 @@ document.getElementById('refreshPage').addEventListener('click', function() {
  */
 document.addEventListener('DOMContentLoaded', function() {
 
-
-    /** ■■■■■>>  고객 정보 전화번호 textBox */
     const phoneNumberTbx = document.getElementById('tbx_custTelNumber');
 
     /* 고객 정보 전화번호 tbx 포맷팅 Event */
@@ -25,13 +23,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    /** ■■■■■>>  단말 번호 입력 박스 */
+    /* 단말 번호 입력 박스 onprss Event */
     const serialNumberInput = document.getElementById('serialNumber');
-    /* 단말 번호 입력 입력 박스 keyPrss Event */
     serialNumberInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter') { /* enter키 */
             e.preventDefault();
-            fetchDeviceInventory();
+            completeDeviceSelection();
         }
     });
 
@@ -162,40 +159,26 @@ async function fetchDeviceInfos() {
  * @수정자     :
  * @작성일자   : 2024-02-26
  */
-function fetchDeviceInventory() {
+function fetchDeviceInventory(deviceModelCode, serialNumber) {
 
-    let deviceCode = document.getElementById('deviceModel').value;
-    let deviceNumber = document.getElementById('serialNumber').value;
-
-    /* 단말기 유효성 체크 */
-    if (deviceCode == null || deviceCode === '') {
-        alert('단말기 모델을 선택해주세요.');
-        return;
-    }
-
-    if (deviceNumber == null || deviceNumber === '') {
-        alert('단말기 번호를 입력하세요.');
-        return;
-    }
-    deviceNumber = deviceNumber.padStart(20, '0');
-
-    $.ajax({
-        url: '/api/v1/device/deviceinventory/device-inventory',
-        type: 'GET',
-        data: {
-            deviceCode: deviceCode,
-            deviceNumber: deviceNumber
-        },
-        success: function(response) {
-            alert("단말기 선택 완료");
-
-            console.log('선택 단말 정보 :', response);
-
-        },
-        error: function(xhr, status, error) {
-            console.error('단말기 정보 조회 실패:', error);
-            alert('단말기 정보 조회에 실패했습니다.');
-        }
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: '/api/v1/device/deviceinventory/device-inventory',
+            type: 'GET',
+            data: {
+                deviceCode: deviceModelCode,
+                deviceNumber: serialNumber.padStart(20, '0')
+            },
+            success: function(response) {
+                alert("단말기 선택 완료");
+                console.log('선택 단말 정보 :', response);
+                resolve();      // Promise 성공 처리
+            },
+            error: function(xhr, status, error) {
+                console.error('단말기 정보 조회 실패:', error);
+                reject(error);  // Promise 실패 처리
+            }
+        });
     });
 }
 
@@ -411,34 +394,6 @@ function completeSale() {
 
 }
 
-/* 요금제 전체 조회 */
-async function fetchPlanInfos() {
-    try {
-        const planInfos = await $.ajax({
-            url: '/api/v1/plcys/retrieveAll',
-            type: 'GET',
-            success: function (planInfos) {
-                console.log("요금제 정보 조회 성공:", planInfos);
-                const planSelect = document.getElementById('plan');
-                planSelect.innerHTML = '<option value="">요금제 선택</option>';
-
-                /* 조회된 요금제 정보를 selectBox에 세팅 */
-                planInfos.forEach(function (planInfo) {
-                    const option = new Option(planInfo.planName, planInfo.planCode);
-                    planSelect.add(option);
-                });
-            },
-            error: function (error) {
-                console.error("요금제 정보 조회 실패:", error);
-                alert('요금제 정보를 조회할 수 없습니다.');
-            }
-        });
-    } catch (error) {
-        console.error("요금제 정보 조회 실패:", error);
-        alert('요금제 정보를 조회할 수 없습니다.');
-    }
-}
-
 /**
  * @name      : 단말기 판매 처리 api 호출 후 처리 함수
  * @작성자     : 권유리
@@ -591,7 +546,11 @@ function validateSaleAmount() {
  * @작성일자   : 2024-03-02
  */
 function onDeviceModelChange() {
-    // 단말기 모델 선택이 변경되었을 때, 금액 필드 초기화
+
+    /* 단말 번호 초기화 */
+    document.getElementById('serialNumber').value = '';
+
+    /* 단말기 모델 선택이 변경되었을 때, 금액 필드 초기화 */
     resetAmountFields();
 }
 
@@ -615,4 +574,42 @@ function onPlanChange() {
 function onSubsidyChange() {
     // 지원금 라디오 버튼이 변경되었을 때, 금액 필드 초기화
     resetAmountFields();
+}
+
+
+/**
+ * @name      : 단말선택 완료 onclick 이벤트 시 수행되는 함수
+ * @작성자     : 권유리
+ * @수정자     :
+ * @작성일자   : 2024-03-03
+ */
+function completeDeviceSelection() {
+
+    /* 단말 모델 selectBox 유효성 확인 */
+    let deviceModelCode = document.getElementById('deviceModel').value;
+    if (!deviceModelCode) {
+        alert('단말기 모델을 선택해주세요.');
+        return;
+    }
+
+    /* 단말 번호 inputBox 유효성 확인 */
+    let serialNumber = document.getElementById('serialNumber').value;
+    if (!serialNumber) {
+        alert('단말 번호를 입력해주세요.');
+        return;
+    }
+
+    /** ■■■■■>> 단말기 정보 조회 */
+    fetchDeviceInventory(deviceModelCode, serialNumber)
+        .then(() => {
+            /** ■■■■■>> 요금제 전체 조회 */
+            fetchPlanInfos();
+
+            /** ■■■■■>> 금액 초기화 */
+            resetAmountFields();
+        })
+        .catch(error => {
+            console.error('단말기 정보 조회 중 오류 발생:', error);
+            alert('단말기 정보 조회 중 오류가 발생했습니다.');
+        });
 }
