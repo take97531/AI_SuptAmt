@@ -242,7 +242,7 @@ function selectSubsidy() {
         const marketCode = document.getElementById('marketCodeInput').value; // 마켓 코드 설정 (쿼리 파라미터로 추가)
 
         $.ajax({
-            url: `/api/v1/public/subsidy/${deviceCode}/${planCode}`,
+            url: `/api/v1/public/subsidydto/${deviceCode}/${planCode}`,
             method: 'GET',
             async: false,
             success: function (data) {
@@ -256,7 +256,7 @@ function selectSubsidy() {
                 });
 
                 console.log("validPolicies : " + validPolicies); // 응답 데이터 처리
-                subsidyAmount = validPolicies[0].supportAmount;
+                subsidyAmount = data[0].supportAmount;
                 // 예: 데이터를 화면에 표시하는 로직 추가
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -361,17 +361,17 @@ function completeSale() {
     const selectedDeviceInfo = allDeviceInfos.find(device => device.deviceCode === deviceCode);
     let devicePrice = "";
     if (selectedDeviceInfo) {
-        devicePrice = selectedDeviceInfo.devicePrice;
+        devicePrice =  parseInt(selectedDeviceInfo.devicePrice);
         console.log("선택된 디바이스의 가격:", devicePrice);
     } else {
         console.error("해당 deviceCode에 대한 디바이스 정보를 찾을 수 없습니다.");
     }
 
     /* 지원금액 세팅 */
-    let subsidyAmount = "";
+    let subsidyAmount = 0;
 
     /* 판매금액 세팅 */
-    let paymentAmount = "";
+    let paymentAmount = 0;
 
     /* 고객 정보가 없을 경우 작업을 막고 메시지를 표시 */
     if (!validateCustomerInfo()) {
@@ -437,13 +437,10 @@ async function fetchPlanInfos() {
     }
 }
 
-
-
 /**
- * @name      : 단말 판매 처리 api
+ * @name      : 단말기 판매 처리 api 호출 후 처리 함수
  * @작성자     : 권유리
- * @수정자     :
- * @작성일자   : 2024-03-01
+ * @작성일자   : 2024-03-03
  */
 function sendSaleDataToServer(saleData) {
     fetch('/api/v1/sales/presales', {
@@ -455,18 +452,32 @@ function sendSaleDataToServer(saleData) {
     })
         .then(response => {
             if (response.ok) {
-                alert('판매가 완료되었습니다.');
+                // API 호출 성공 시 응답 데이터를 JSON으로 파싱하여 처리
+                return response.json();
             } else {
+                // API 호출 실패 시 오류 메시지를 처리
                 return response.text().then(errorMsg => {
                     throw new Error(`판매에 실패했습니다: ${errorMsg}`);
                 });
             }
         })
+        .then(data => {
+            // API 응답 데이터를 확인하여 처리
+            if (data.rsltCd === 'Y') {
+                // 성공적으로 처리된 경우 메시지를 알림창으로 표시
+                alert(data.rsltMsg);
+            } else {
+                // 처리 실패 시 메시지를 알림창으로 표시
+                alert(`판매에 실패했습니다: ${data.rsltMsg}`);
+            }
+        })
         .catch(error => {
+            // 오류 발생 시 콘솔에 오류 로그를 출력하고 알림창으로 오류 메시지 표시
             console.error('판매 요청 에러:', error);
             alert('판매 요청 중 에러가 발생했습니다: ' + error.message);
         });
 }
+
 
 let allPlanInfos = [];
 /* 요금제 전체 조회 */
