@@ -271,6 +271,7 @@ function selectSubsidy() {
     $('#totalAmount').val(totalAmount);
     $('#subsidyAmount').val(subsidyAmount);
     $('#salesAmount').val(totalAmount-subsidyAmount);
+    $('#differenceAmount').val(totalAmount-subsidyAmount);
     alert("지원금 선택이 완료되었습니다.");
 }
 
@@ -351,6 +352,7 @@ function completeSale() {
 
     debugger;
 
+    /** ■■■■■>> 데이터 세팅 */
     /* 가입Id, 단말코드, 단말번호, 요금제코드 세팅 */
     let subscriptionId = document.getElementById('customerIDInput').value;
     let deviceCode = document.getElementById('deviceModel').value;
@@ -367,12 +369,12 @@ function completeSale() {
         console.error("해당 deviceCode에 대한 디바이스 정보를 찾을 수 없습니다.");
     }
 
-    /* 지원금액 세팅 */
-    let subsidyAmount = 0;
+    /* 지원금액 , 판매금액 세팅 */
+    let subsidyAmount = parseFloat(document.getElementById('subsidyAmount').value) || 0 ;
+    let salesAmount = parseFloat(document.getElementById('salesAmount').value) || 0;
 
-    /* 판매금액 세팅 */
-    let paymentAmount = 0;
 
+    /** ■■■■■>> validation */
     /* 고객 정보가 없을 경우 작업을 막고 메시지를 표시 */
     if (!validateCustomerInfo()) {
         return;
@@ -393,7 +395,7 @@ function completeSale() {
         return;
     }
 
-    /* 판매 데이터 세팅 */
+    /** ■■■■■>> 판매 데이터 세팅 */
     const saleData = {
         subscriptionId: subscriptionId,
         deviceCode: deviceCode,
@@ -401,10 +403,10 @@ function completeSale() {
         planCode: planCode,
         devicePrice: devicePrice,
         supportAmount: subsidyAmount,
-        saleAmount: paymentAmount
+        saleAmount: salesAmount
     };
 
-    /* 판매 처리 */
+    /** ■■■■■>> 판매처리 */
     sendSaleDataToServer(saleData);
 
 }
