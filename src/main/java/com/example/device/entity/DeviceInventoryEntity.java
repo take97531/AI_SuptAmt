@@ -1,7 +1,5 @@
 package com.example.device.entity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +17,7 @@ import java.time.LocalDateTime;
 public class DeviceInventoryEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String deviceCode;
     private String deviceNumber;
     private String deviceUsage;
