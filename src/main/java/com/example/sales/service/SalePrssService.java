@@ -72,7 +72,7 @@ public class SalePrssService {
             // 판매정보 update
             SaleInfoEntity saleInfo = new SaleInfoEntity();
             //saleInfo.setSaleId(UUID.randomUUID().toString());
-            saleInfo.setSaleId("123456789");
+            saleInfo.setSaleId(UUID.randomUUID().toString());
             saleInfo.setSubscriptionId(salePrssDTO.getSubscriptionId());
             saleInfo.setSaleDatetime(now);
             saleInfo.setDeviceCode(salePrssDTO.getDeviceCode());
