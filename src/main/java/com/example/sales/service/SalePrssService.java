@@ -69,7 +69,7 @@ public class SalePrssService {
             }
 
             // 판매정보 update
-            SaleInfoEntity saleInfo = new SaleInfoEntity();
+            /*SaleInfoEntity saleInfo = new SaleInfoEntity();
             saleInfo.setSubscriptionId(salePrssDTO.getSubscriptionId());
             saleInfo.setSaleDatetime(now);
             saleInfo.setDeviceCode(salePrssDTO.getDeviceCode());
@@ -83,7 +83,20 @@ public class SalePrssService {
             saleInfo.setCreateProgram("salePrss");
             saleInfo.setCreateDatetime(now);
 
-            saleInfoRepository.save(saleInfo);
+            saleInfoRepository.save(saleInfo);*/
+
+            saleInfoRepository.insertSaleInfo(salePrssDTO.getSubscriptionId(),
+                    now,
+                    salePrssDTO.getDeviceCode(),
+                    salePrssDTO.getDeviceNumber(),
+                    salePrssDTO.getDevicePrice(),
+                    salePrssDTO.getSupportAmount(),
+                    salePrssDTO.getSaleAmount(),
+                    now,
+                    now.plusMonths(24),
+                    "정하성",
+                    "salePrss",
+                    now);
 
             rslt.setRsltMsg("판매성공");
             rslt.setRsltCd("Y");
