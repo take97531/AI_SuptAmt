@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SalePrssService {
@@ -70,6 +71,7 @@ public class SalePrssService {
 
             // 판매정보 update
             SaleInfoEntity saleInfo = new SaleInfoEntity();
+            saleInfo.setSaleId(UUID.randomUUID().toString());
             saleInfo.setSubscriptionId(salePrssDTO.getSubscriptionId());
             saleInfo.setSaleDatetime(now);
             saleInfo.setDeviceCode(salePrssDTO.getDeviceCode());
