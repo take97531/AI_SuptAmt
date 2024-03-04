@@ -1,5 +1,7 @@
 package com.example.suptplcy.service;
 
+import com.example.device.entity.DeviceInfoEntity;
+import com.example.device.repository.DeviceInfoRepository;
 import com.example.suptplcy.dto.DeviceSubsidyPolicyDTO;
 import com.example.suptplcy.entity.DeviceSubsidyPolicyEntity;
 import com.example.suptplcy.entity.DeviceSubsidyPolicyMapper;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class DeviceSubsidyPolicyService {
     private final DeviceSubsidyPolicyRepository deviceSubsidyPolicyRepository;
     private final DeviceSubsidyPolicyMapper deviceSubsidyPolicyMapper;
+    private final DeviceInfoRepository deviceInfoRepository;
 
     public List<DeviceSubsidyPolicyEntity> getSubsidyByDeviceAndPlan(String deviceCode, String planCode) {
         return deviceSubsidyPolicyRepository.findByDeviceCodeAndPlanCode(deviceCode, planCode);
@@ -27,11 +30,23 @@ public class DeviceSubsidyPolicyService {
 
     public void createDeviceSubsidyPolicy(DeviceSubsidyPolicyDTO policyDTO) {
         DeviceSubsidyPolicyDTO policy = new DeviceSubsidyPolicyDTO();
+
         policy.setMarketCode(policyDTO.getMarketCode());
         policy.setStartDatetime(policyDTO.getStartDatetime());
         policy.setEndDatetime(policyDTO.getEndDatetime());
         policy.setDiscountType(policyDTO.getDiscountType());
         policy.setDeviceCode(policyDTO.getDeviceCode());
+
+        // DeviceInfo에서 출고가 가져오기
+        DeviceInfoEntity deviceInfoEntity = deviceInfoRepository.findById(policyDTO.getDeviceCode()).orElse(null);
+        if (deviceInfoEntity != null) {
+            double devicePriceDouble = deviceInfoEntity.getDevicePrice().doubleValue();
+            policy.setDeviceAmount(devicePriceDouble);
+        } else {
+            // DeviceInfo가 없을 경우에 대한 예외 처리
+            throw new RuntimeException("DeviceInfo not found for deviceId: " + policyDTO.getDeviceCode());
+        }
+
         policy.setSupportAmount(policyDTO.getSupportAmount());
         policy.setPlanCode(policyDTO.getPlanCode());
         policy.setCreatedBy("test");

@@ -33,6 +33,9 @@ public class DeviceSubsidyPolicyEntity {
     @Column(name = "DEVICE_CODE")
     private String deviceCode;
 
+    @Column(name = "DEVICE_AMOUNT")
+    private double deviceAmount;
+
     @Column(name = "SUPPORT_AMOUNT")
     private double supportAmount;
 
