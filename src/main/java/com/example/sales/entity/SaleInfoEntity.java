@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 public class SaleInfoEntity {
     @Id
-    @GeneratedValue(generator = "UUID")
+    //@GeneratedValue(generator = "UUID")
     @Column(name = "SALE_ID")
     private String saleId;
 
