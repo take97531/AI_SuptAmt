@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,9 +31,9 @@ public class DeviceSubsidyPolicyService {
     }
 
     public void createDeviceSubsidyPolicy(DeviceSubsidyPolicyDTO policyDTO) {
-        DeviceSubsidyPolicyDTO policy = new DeviceSubsidyPolicyDTO();
+        DeviceSubsidyPolicyEntity policy = new DeviceSubsidyPolicyEntity();
 
-        policy.setMarketCode(policyDTO.getMarketCode());
+        policy.setMarketCode("LGT");
         policy.setStartDatetime(policyDTO.getStartDatetime());
         policy.setEndDatetime(policyDTO.getEndDatetime());
         policy.setDiscountType(policyDTO.getDiscountType());
@@ -56,7 +58,7 @@ public class DeviceSubsidyPolicyService {
         policy.setUpdatedBy("test");
         policy.setUpdateProgram("test");
         policy.setUpdateDatetime(LocalDateTime.now());
-        deviceSubsidyPolicyRepository.save(deviceSubsidyPolicyMapper.toDeviceSubsidyPolicyEntity(policy));
+        deviceSubsidyPolicyRepository.save(policy);
     }
 
 

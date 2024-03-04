@@ -1,16 +1,14 @@
 package com.example.suptplcy.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "DEVICE_SUBSIDY_POLICY")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @EqualsAndHashCode(callSuper = false)
 public class DeviceSubsidyPolicyEntity {
@@ -18,7 +16,7 @@ public class DeviceSubsidyPolicyEntity {
     @Column(name = "DEVICE_SUBSIDY_POLICY_ID", nullable = false)
     private int deviceSubsidyPolicyId;
 
-    @Column(name = "MARKET_CODE", nullable = false)
+    @Column(name = "MARKET_CODE")
     private String marketCode;
 
     @Column(name = "START_DATETIME")
@@ -42,13 +40,13 @@ public class DeviceSubsidyPolicyEntity {
     @Column(name = "PLAN_CODE")
     private String planCode;
 
-    @Column(name = "CREATED_BY", nullable = false)
+    @Column(name = "CREATED_BY")
     private String createdBy;
 
-    @Column(name = "CREATE_PROGRAM", nullable = false)
+    @Column(name = "CREATE_PROGRAM")
     private String createProgram;
 
-    @Column(name = "CREATE_DATETIME", nullable = false)
+    @Column(name = "CREATE_DATETIME")
     private LocalDateTime createDatetime;
 
     @Column(name = "UPDATED_BY")

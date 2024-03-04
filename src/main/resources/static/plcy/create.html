@@ -47,26 +47,6 @@
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-
-    // 사용자가 초를 입력하지 않으면 자동으로 초를 추가하는 함수
-    function addSecondsIfNeeded(dateTimeInput) {
-        let value = dateTimeInput.value;
-        // 사용자가 입력한 값이 초를 포함하지 않는 경우
-        if (value && value.length === 16) {
-            dateTimeInput.value += ":00"; // 초를 추가하여 설정
-        }
-    }
-
-    // 시작 일시 입력란에 초를 추가
-    document.getElementById("startDateTime").addEventListener("blur", function() {
-        addSecondsIfNeeded(this);
-    });
-
-    // 종료 일시 입력란에 초를 추가
-    document.getElementById("endDateTime").addEventListener("blur", function() {
-        addSecondsIfNeeded(this);
-    });
-
     $(document).ready(function(){
         $('#createPolicyForm').submit(function(e){
             e.preventDefault();
