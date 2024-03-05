@@ -43,7 +43,6 @@ public class SalePrssService {
 
         try{
             // 단말재고정보 테이블 상태 update
-
             Optional<DeviceInventoryDTO> deviceInventoryDTO =
                     deviceInventoryService.findByCodeAndNumber(salePrssDTO.getDeviceCode(), salePrssDTO.getDeviceNumber());
 
@@ -51,10 +50,6 @@ public class SalePrssService {
                 DeviceInventoryDTO deviceInventory = deviceInventoryDTO.get();
                 deviceInventoryRepository.updateDeviceUsage(deviceInventory.getDeviceCode(), deviceInventory.getDeviceNumber(), "Y");
             }
-
-
-
-
 
             // 계약정보 update
             Optional<ContractInfoDTO> contractInfoDTOs = contractInfoRepository.findBySubscriptionId(salePrssDTO.getSubscriptionId())
@@ -71,7 +66,6 @@ public class SalePrssService {
 
             // 판매정보 update
             SaleInfoEntity saleInfo = new SaleInfoEntity();
-            //saleInfo.setSaleId(UUID.randomUUID().toString());
             saleInfo.setSaleId(UUID.randomUUID().toString());
             saleInfo.setSubscriptionId(salePrssDTO.getSubscriptionId());
             saleInfo.setSaleDatetime(now);
@@ -87,19 +81,6 @@ public class SalePrssService {
             saleInfo.setCreateDatetime(now);
 
             saleInfoRepository.save(saleInfo);
-
-            /*saleInfoRepository.insertSaleInfo(salePrssDTO.getSubscriptionId(),
-                    now,
-                    salePrssDTO.getDeviceCode(),
-                    salePrssDTO.getDeviceNumber(),
-                    salePrssDTO.getDevicePrice(),
-                    salePrssDTO.getSupportAmount(),
-                    salePrssDTO.getSaleAmount(),
-                    now,
-                    now.plusMonths(24),
-                    "정하성",
-                    "salePrss",
-                    now);*/
 
             rslt.setRsltMsg("판매성공");
             rslt.setRsltCd("Y");
