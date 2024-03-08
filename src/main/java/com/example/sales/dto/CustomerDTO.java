@@ -1,12 +1,12 @@
 package com.example.sales.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Data
-@Builder
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@EqualsAndHashCode(callSuper = false)
 public class CustomerDTO {
     private String subscriptionId;
     private String marketCode;
@@ -18,7 +18,7 @@ public class CustomerDTO {
     private String updatedBy;
     private String updateProgram;
     private LocalDateTime updateDatetime;
-
+    @Builder
     public CustomerDTO(String subscriptionId, String marketCode, LocalDateTime subscriptionDatetime,
                        String subscriptionPhone, String createdBy, String createProgram,
                        LocalDateTime createDatetime, String updatedBy, String updateProgram,
@@ -34,4 +34,5 @@ public class CustomerDTO {
         this.updateProgram = updateProgram;
         this.updateDatetime = updateDatetime;
     }
+
 }
