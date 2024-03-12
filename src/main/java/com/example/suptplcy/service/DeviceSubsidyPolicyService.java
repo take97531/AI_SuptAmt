@@ -49,6 +49,7 @@ public class DeviceSubsidyPolicyService {
             throw new RuntimeException("DeviceInfo not found for deviceId: " + policyDTO.getDeviceCode());
         }
 
+        policy.setDeviceSubsidyPolicyId(UUID.randomUUID().toString());
         policy.setSupportAmount(policyDTO.getSupportAmount());
         policy.setPlanCode(policyDTO.getPlanCode());
         policy.setCreatedBy("test");
@@ -89,6 +90,7 @@ public class DeviceSubsidyPolicyService {
                 .endDatetime(entity.getEndDatetime())
                 .discountType(entity.getDiscountType())
                 .deviceCode(entity.getDeviceCode())
+                .deviceAmount(entity.getDeviceAmount())
                 .supportAmount(entity.getSupportAmount())
                 .planCode(entity.getPlanCode())
                 .createdBy(entity.getCreatedBy())

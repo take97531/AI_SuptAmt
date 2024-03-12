@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class DeviceSubsidyPolicyEntity {
     @Id
     @Column(name = "DEVICE_SUBSIDY_POLICY_ID", nullable = false)
-    private int deviceSubsidyPolicyId;
+    private String deviceSubsidyPolicyId;
 
     @Column(name = "MARKET_CODE")
     private String marketCode;

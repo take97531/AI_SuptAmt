@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 public class DeviceSubsidyPolicyDTO {
 
-    private int deviceSubsidyPolicyId;
+    private String deviceSubsidyPolicyId;
     private String marketCode;
     private LocalDateTime startDatetime;
     private LocalDateTime endDatetime;
@@ -30,7 +30,7 @@ public class DeviceSubsidyPolicyDTO {
         // 기본 생성자
     }
 
-    public DeviceSubsidyPolicyDTO(int deviceSubsidyPolicyId, String marketCode, LocalDateTime startDatetime, LocalDateTime endDatetime,
+    public DeviceSubsidyPolicyDTO(String deviceSubsidyPolicyId, String marketCode, LocalDateTime startDatetime, LocalDateTime endDatetime,
     String discountType, String deviceCode, double deviceAmount, double supportAmount, String planCode, String createdBy, String createProgram, LocalDateTime createDatetime, String updatedBy,
     String updateProgram, LocalDateTime updateDatetime){
         this.deviceSubsidyPolicyId = deviceSubsidyPolicyId;

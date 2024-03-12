@@ -1,7 +1,6 @@
 package com.example.device.dto;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -12,6 +11,8 @@ import java.time.LocalDateTime;
  */
 @Data
 @Builder
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@EqualsAndHashCode(callSuper = false)
 public class DeviceInventoryDTO {
 
     private String deviceCode;
