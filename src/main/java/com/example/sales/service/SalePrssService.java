@@ -76,7 +76,7 @@ public class SalePrssService {
             saleInfo.setSaleAmount(salePrssDTO.getSaleAmount());
             saleInfo.setContractStartDatetime(now);
             saleInfo.setContractEndDatetime(now.plusMonths(24));
-            saleInfo.setCreatedBy("정하성");
+            saleInfo.setCreatedBy("hsjung03");
             saleInfo.setCreateProgram("salePrss");
             saleInfo.setCreateDatetime(now);
 

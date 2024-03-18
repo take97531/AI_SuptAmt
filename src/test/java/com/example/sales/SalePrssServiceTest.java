@@ -3,13 +3,15 @@ package com.example.sales;
 import com.example.sales.dto.RsltDTO;
 import com.example.sales.dto.SalePrssDTO;
 import com.example.sales.service.SalePrssService;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 
@@ -20,9 +22,13 @@ public class SalePrssServiceTest {
     @Autowired
     private SalePrssService salePrssService;
 
+    @BeforeEach
+    public void setUp() {
+        // MockitoAnnotations.initMocks(this);
+    }
+
     @Test
-    @Transactional
-    void SalePrss() throws Exception {
+    public void SalePrss() throws Exception {
         // 테스트 데이터 준비
         SalePrssDTO salePrssDTO = new SalePrssDTO();
         salePrssDTO.setDeviceCode("SM-G996N");
@@ -39,8 +45,5 @@ public class SalePrssServiceTest {
         // 결과 검증
         assertEquals("Y", result.getRsltCd());
         assertEquals("판매성공", result.getRsltMsg());
-    }
-
-    private void assertEquals(String y, String rsltCd) {
     }
 }
