@@ -29,4 +29,8 @@ public class SalePrssDTO {
         this.supportAmount = supportAmount;
         this.saleAmount = saleAmount;
     }
+
+    public SalePrssDTO() {
+
+    }
 }
