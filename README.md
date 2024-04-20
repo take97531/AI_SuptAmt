@@ -3,8 +3,11 @@ Mysql DB server 로컬pc에 다운로드
 
 ## 2. Mysql DB server setting
 $ mysql -u[id] -p[pw]
+
 $ create database PLAN_INFO;
+
 $ create user 'aiproj'@'localhost' identified by 'a123456789';
+
 $ grant all privileges on *.* to 'aiproj'@'localhost';
 
 ## 3. Create tables for AI project server running
